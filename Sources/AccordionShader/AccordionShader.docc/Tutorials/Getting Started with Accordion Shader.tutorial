@@ -1,0 +1,28 @@
+@Tutorial(time: 1) {
+    @Intro(title: "Getting Started with Accordion Shader") {
+        text
+        
+    }
+    
+    @Section(title: "Adding it to your project") {
+        @ContentAndMedia {
+            AccordionShader is delivered as a Swift Package
+            
+        
+        }
+        
+        @Steps {
+            @Step {
+                text
+                
+        
+            }
+            
+            @Step {
+                text
+                
+        
+            }
+        }
+    }
+}

@@ -1,0 +1,70 @@
+name: Commit Workflow
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build.yml'
+      - "*.swift"
+
+concurrency:
+  group: "${{ github.ref }}_build"
+  cancel-in-progress: true
+
+env:
+  PACKAGE_NAME=Accordion
+  REPOSITORY_NAME=Accordion
+  OUTPUT_PATH=./docs
+  DEVELOPER_DIR: /Applications/Xcode_15.app/Contents/Developer
+  
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Build Package
+        run: swift build
+        
+  test:
+    name: Test
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Build Package
+        run: swift test
+  
+  buildDocs:
+    name: Build Docs
+    needs: Build
+    runs-on: self-hosted
+    if: github.ref != 'refs/heads/main'
+    timeout-minutes: 5
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Generate Documentation
+        run:  |
+          swift package --allow-writing-to-directory $OUTPUT_PATH \
+            generate-documentation --target $PACKAGE_NAME \
+            --disable-indexing \
+            --transform-for-static-hosting \
+            --hosting-base-path $REPOSITORY_NAME \
+            --output-path $OUTPUT_PATH
+            
+      - name: Commit Documentation
+        run: |
+          git config --global user.email "${{ secrets.CI_BOT_EMAIL }}"
+          git config --global user.name "${{ secrets.CI_BOT_NAME }}"
+          git add $OUTPUT_PATH
+          git commit -m "docs: Update docs [skip ci]" || echo "No changes to commit"
+          git push   

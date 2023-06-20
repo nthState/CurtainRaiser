@@ -1,0 +1,21 @@
+@Tutorials(name: "Accordion Shader Tutorials") {
+    @Intro(title: "Introduction") {
+        Intro text
+
+    }
+    
+    @Chapter(name: "Chapter 1") {
+        Chapter 1...
+
+        
+        @TutorialReference(tutorial: "doc:Getting-Started-with-Accordion-Shader")
+    }
+    
+    @Chapter(name: "Chapter 2") {
+        Chapter 2...
+
+        
+        @TutorialReference(tutorial: "doc:Integrating-with-a-Gesture")
+    }
+    
+}
