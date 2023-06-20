@@ -88,8 +88,8 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   // Rotation matrix
   float3x3 rotationMatrix = float3x3(
                                      1.0, 0.0, 0.0,
-                                     0.0, cos(angle_radians), -sin(angle_radians),
-                                     0.0, sin(angle_radians), cos(angle_radians)
+                                     0.0, cos(angle_radians), sin(angle_radians),
+                                     0.0, -sin(angle_radians), cos(angle_radians)
                                      );
 
   // Apply rotation

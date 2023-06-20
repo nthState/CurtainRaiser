@@ -24,9 +24,13 @@ extension ExampleView: View {
     }
 
     private var foregroundView: some View {
-        VStack {
+        ZStack {
             Text("Hello")
-            Text("World")
+                .font(.headline)
+
+            Checkerboard(rows: 4, columns: 4)
+                        .fill(.gray)
+                        .frame(width: 300, height: 300)
         }
         .frame(width: 300, height: 300)
         .background(
