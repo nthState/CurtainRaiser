@@ -71,7 +71,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   //float2 centerCoordinates = position - (viewSize * 0.5);
 
   // Convert position to 3d space
-  float3 position3D = float3(position, 1.0);
+  float3 position3D = float3(position, 0.0);
 
   // The point at which all points rotate around, ie, the top of the texture
   //float3 rotateAround = float3(position3D.x, 0.0, 0.0);
@@ -99,7 +99,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float3 finalPosition = rotatedPosition + rotateAround;
 
   // Center coordinates
-  finalPosition = finalPosition - (float3(viewSize, 1.0) * 0.5);
+  finalPosition = finalPosition - (float3(viewSize, 0.0) * 0.5);
 
   float4x4 viewMatrix = generateViewMatrix(cameraPosition);
 
