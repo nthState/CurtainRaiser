@@ -56,7 +56,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   const float2 offset = float2(data[4], data[5]);
   const float2 viewSize = float2(viewPort.z, viewPort.w);
   const float aspectRatio = viewSize.x / viewSize.y;
-   float angle_radians = degreesToRadians(data[6]);
+  float angle_radians = degreesToRadians(data[6]);
   const float fov_radians = degreesToRadians(data[7]);
 
 
@@ -71,7 +71,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   //float2 centerCoordinates = position - (viewSize * 0.5);
 
   // Convert position to 3d space
-  float3 position3D = float3(position, 0.0);
+  float3 position3D = float3(position, 1.0);
 
   // The point at which all points rotate around, ie, the top of the texture
   //float3 rotateAround = float3(position3D.x, 0.0, 0.0);

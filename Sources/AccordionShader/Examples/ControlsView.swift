@@ -67,7 +67,7 @@ extension ControlsView: View {
     private var cameraXView: some View {
       HStack {
         Text("cameraX: \(control.cameraX, specifier: "%0.3f")")
-        Slider(value: $control.cameraX, in: -20.0...20.0)
+        Slider(value: $control.cameraX, in: -180.0...180.0)
         Button("Reset") {
           control.cameraX = 0.0
         }
@@ -77,7 +77,7 @@ extension ControlsView: View {
     private var cameraYView: some View {
       HStack {
         Text("cameraY: \(control.cameraY, specifier: "%0.3f")")
-        Slider(value: $control.cameraY, in: -150.0...150.0)
+        Slider(value: $control.cameraY, in: -180.0...180.0)
         Button("Reset") {
           control.cameraY = 0.0
         }
@@ -97,7 +97,7 @@ extension ControlsView: View {
     private var angleView: some View {
       HStack {
         Text("angle: \(control.angle, specifier: "%0.3f")")
-        Slider(value: $control.angle, in: -90.0...90.0)
+        Slider(value: $control.angle, in: -180.0...180.0)
         Button("Reset") {
           control.angle = 0.0
         }
