@@ -56,7 +56,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
     
     let library: ShaderLibrary = .bundle(.module)
     
-    let distortionShaderFunction = ShaderFunction(library: library, name: "accordion")
+    let distortionShaderFunction = ShaderFunction(library: library, name: "accordionProjection")
     self.distortionShader = Shader(function: distortionShaderFunction, arguments: [
         .floatArray([Float(sections), cameraX, cameraY, cameraZ, Float(offset.x), Float(offset.y.clamped(to: 0.0...1.0)), angle, fov]),
       .boundingRect,

@@ -45,7 +45,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
 // MARK: Shader
 
 
-[[ stitchable ]] float2 accordion(float2 position,
+[[ stitchable ]] float2 accordionProjection(float2 position,
                                   device const float *data,
                                   int count,
                                   float4 viewPort
@@ -59,7 +59,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float angle_radians = degreesToRadians(data[6]);
   const float fov_radians = degreesToRadians(data[7]);
 
-
+    const float zOffset = 500.0;
 
   float totalHeight = getTotalHeight(viewPort, sections, offset);
   float sectionHeight = getSectionHeight(totalHeight, sections);
@@ -71,12 +71,12 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   //float2 centerCoordinates = position - (viewSize * 0.5);
 
   // Convert position to 3d space
-  float3 position3D = float3(position, 0.0);
+  float3 position3D = float3(position, zOffset);
 
   // The point at which all points rotate around, ie, the top of the texture
   //float3 rotateAround = float3(position3D.x, 0.0, 0.0);
   float rotatePos = (section.direction == 0) ? section.top : section.bottom;
-  float3 rotateAround = float3(position3D.x, rotatePos, 0.0);
+  float3 rotateAround = float3(position3D.x, rotatePos, zOffset);
 
   // Translation from center
   float3 translatedPosition = position3D - rotateAround;
@@ -99,12 +99,12 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float3 finalPosition = rotatedPosition + rotateAround;
 
   // Center coordinates
-  finalPosition = finalPosition - (float3(viewSize, 0.0) * 0.5);
+  finalPosition = finalPosition - (float3(viewSize, zOffset) * 0.5);
 
   float4x4 viewMatrix = generateViewMatrix(cameraPosition);
 
   float nearPlane = 0.01;
-  float farPlane = 10.0;
+  float farPlane = 1000.0;
 
   float4x4 projectionMatrix = generateProjectionMatrix(fov_radians,
                                                        aspectRatio,
@@ -115,9 +115,12 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
 
   float4 ndcPosition = clipSpacePosition / clipSpacePosition.w;
 
+  //https://stackoverflow.com/questions/724219/how-to-convert-a-3d-point-into-2d-perspective-projection
   float2 screenPosition;
   screenPosition.x = (ndcPosition.x + 1.0) * 0.5 * viewSize.x;
   screenPosition.y = (1.0 - ndcPosition.y) * 0.5 * viewSize.y;
+//  screenPosition.x = (ndcPosition.x * viewSize.x ) / (2.0 * ndcPosition.w) + (viewSize.x / 2.0);
+//  screenPosition.y = (ndcPosition.y * viewSize.y) / (2.0 * ndcPosition.w) + (viewSize.y / 2.0);
 
   return screenPosition;
 
