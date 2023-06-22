@@ -16,16 +16,20 @@ extension ControlsView: View {
 
   private var content: some View {
     VStack {
-      sectionCount
-      offsetSlider
+      Group {
+        sectionCount
+        offsetSlider
+        angleView
+      }
+
       Group {
         cameraXView
         cameraYView
         cameraZView
       }
-      angleView
-      fovView
+
       Group {
+        fovView
         nearView
         farView
       }

@@ -21,9 +21,10 @@ constant half4 DEBUG_OFFSET     = half4(0.0, 0.0, 1.0, 1.0);
   //[Float(sections), cameraX, cameraY, cameraZ, Float(offset.x), Float(offset.y), angle, fov])
   const float sections = data[0];
   const float2 offset = float2(data[4], data[5]);
-  
+    const float2 inverseOffset = float2(1.0-offset.x, 1.0-offset.y);
+
   //Section section = getSection(position, viewPort, sections, offset);
-  float totalHeight = getTotalHeight(viewPort, sections, offset);
+  float totalHeight = getTotalHeight(viewPort, sections, inverseOffset);
   float sectionHeight = getSectionHeight(totalHeight, sections);
   
   // Set the default output colour to the same as the input
