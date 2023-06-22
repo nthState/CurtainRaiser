@@ -7,9 +7,9 @@
 #include "Shared.metal"
 using namespace metal;
 
-constant half4 DEBUG_TOP        = half4(0.0, 1.0, 0.0, 1.0);
-constant half4 DEBUG_BOTTOM     = half4(1.0, 0.0, 0.0, 1.0);
-constant half4 DEBUG_BASELINE   = half4(1.0, 1.0, 0.0, 1.0);
+//constant half4 DEBUG_TOP        = half4(0.0, 1.0, 0.0, 1.0);
+//constant half4 DEBUG_BOTTOM     = half4(1.0, 0.0, 0.0, 1.0);
+//constant half4 DEBUG_BASELINE   = half4(1.0, 1.0, 0.0, 1.0);
 constant half4 DEBUG_OFFSET     = half4(0.0, 0.0, 1.0, 1.0);
 
 [[ stitchable ]] half4 debug(float2 position,

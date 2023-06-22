@@ -46,42 +46,47 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
 
 
 [[ stitchable ]] float2 accordionProjection(float2 position,
-                                  device const float *data,
-                                  int count,
-                                  float4 viewPort
-                                  ) {
+                                            device const float *data,
+                                            int count,
+                                            float4 viewPort
+                                            ) {
 
   const float sections = data[0];
   const float3 cameraPosition = float3(data[1], data[2], data[3]);
   const float2 offset = float2(data[4], data[5]);
+    const float2 inverseOffset = float2(1.0-offset.x, 1.0-offset.y);
   const float2 viewSize = float2(viewPort.z, viewPort.w);
   const float aspectRatio = viewSize.x / viewSize.y;
-  float angle_radians = degreesToRadians(data[6]);
-  const float fov_radians = degreesToRadians(data[7]);
+  float angle_radians = degreesToRadians(90.0 * offset.y);
+  const float fov_radians = degreesToRadians(data[6]);
+  const float nearPlane = data[7];
+  const float farPlane = data[8];
+  const float zPosition = 0.0;
 
-    const float zOffset = 500.0;
-
-  float totalHeight = getTotalHeight(viewPort, sections, offset);
+  float totalHeight = getTotalHeight(viewPort, sections, inverseOffset);
   float sectionHeight = getSectionHeight(totalHeight, sections);
 
-  //    float sectionHeight = getSectionHeight(viewPort, sections);
+    if (position.y > totalHeight) {
+        return float2(-1,-1);
+    }
+
   Section section = getSection(position, viewPort, sectionHeight);
 
   // Convert to center based co-ordinates
   //float2 centerCoordinates = position - (viewSize * 0.5);
 
   // Convert position to 3d space
-  float3 position3D = float3(position, zOffset);
+  float3 position3D = float3(position, zPosition);
 
   // The point at which all points rotate around, ie, the top of the texture
   //float3 rotateAround = float3(position3D.x, 0.0, 0.0);
   float rotatePos = (section.direction == 0) ? section.top : section.bottom;
-  float3 rotateAround = float3(position3D.x, rotatePos, zOffset);
+  float3 rotateAround = float3(position3D.x, rotatePos, zPosition);
 
   // Translation from center
   float3 translatedPosition = position3D - rotateAround;
 
-  if (section.direction == 0) {
+  if (section.direction != 0) {
     angle_radians = -angle_radians;
   }
 
@@ -98,13 +103,14 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   // Translate back to original position
   float3 finalPosition = rotatedPosition + rotateAround;
 
+  // Collapse
+  const float3 collapseAmount = float3(0.0, (sectionHeight * offset.y), 0.0);
+  finalPosition -= collapseAmount;
+
   // Center coordinates
-  finalPosition = finalPosition - (float3(viewSize, zOffset) * 0.5);
+  finalPosition = finalPosition - (float3(viewSize, zPosition) * 0.5);
 
   float4x4 viewMatrix = generateViewMatrix(cameraPosition);
-
-  float nearPlane = 0.01;
-  float farPlane = 1000.0;
 
   float4x4 projectionMatrix = generateProjectionMatrix(fov_radians,
                                                        aspectRatio,
@@ -119,8 +125,6 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float2 screenPosition;
   screenPosition.x = (ndcPosition.x + 1.0) * 0.5 * viewSize.x;
   screenPosition.y = (1.0 - ndcPosition.y) * 0.5 * viewSize.y;
-//  screenPosition.x = (ndcPosition.x * viewSize.x ) / (2.0 * ndcPosition.w) + (viewSize.x / 2.0);
-//  screenPosition.y = (ndcPosition.y * viewSize.y) / (2.0 * ndcPosition.w) + (viewSize.y / 2.0);
 
   return screenPosition;
 

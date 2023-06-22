@@ -16,7 +16,16 @@ extension ExampleView: View {
             ZStack {
                 backgroundView
                 foregroundView
-                    .accordion(sections: UInt(control.sections), offset: .init(x: 0, y: control.yOffset), enabled: control.enable, debug: control.debug, angle: control.angle, fov: control.fov, cameraX: control.cameraX, cameraY: control.cameraY, cameraZ: control.cameraZ)
+                    .accordion(sections: UInt(control.sections),
+                               offset: .init(x: 0, y: control.yOffset),
+                               enabled: control.enable,
+                               debug: control.debug,
+                               fov: control.fov,
+                               cameraX: control.cameraX,
+                               cameraY: control.cameraY,
+                               cameraZ: control.cameraZ,
+                               near: 0,
+                               far: 0)
             }
 
             ControlsView(control: control)
@@ -28,9 +37,9 @@ extension ExampleView: View {
             Text("Hello")
                 .font(.headline)
 
-            Checkerboard(rows: 4, columns: 4)
-                        .fill(.gray)
-                        .frame(width: 300, height: 300)
+//            Checkerboard(rows: 4, columns: 4)
+//                        .fill(.gray)
+//                        .frame(width: 300, height: 300)
         }
         .frame(width: 300, height: 300)
         .background(
@@ -50,6 +59,6 @@ extension ExampleView: View {
 
 #if DEBUG
 #Preview("Example view") {
-    ExampleView()
+    ExampleView() as! any View
 }
 #endif

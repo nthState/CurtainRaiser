@@ -42,7 +42,16 @@ extension ExampleGestureView: View {
 //                        control.yOffset = 0
 //                    }
 //            )
-            .accordion(sections: UInt(control.sections), offset: .init(x: 0, y: control.yOffset), enabled: control.enable, debug: control.debug, angle: control.angle, fov: control.fov, cameraX: control.cameraX, cameraY: control.cameraY, cameraZ: control.cameraZ)
+            .accordion(sections: UInt(control.sections),
+                       offset: .init(x: 0, y: control.yOffset),
+                       enabled: control.enable,
+                       debug: control.debug,
+                       fov: control.fov,
+                       cameraX: control.cameraX,
+                       cameraY: control.cameraY,
+                       cameraZ: control.cameraZ,
+                       near: control.near,
+                       far: control.far)
        // }
     }
 
@@ -57,6 +66,6 @@ extension ExampleGestureView: View {
 
 #if DEBUG
 #Preview("Example Gesture View") {
-    ExampleGestureView()
+    ExampleGestureView() as! any View
 }
 #endif

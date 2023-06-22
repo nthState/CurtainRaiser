@@ -44,6 +44,8 @@ may be parts that you do-not wish to install, so pick and choose what you need f
 - Debug should only be available in DEBUG builds
 - Get rid of that annoying UInt conversion
 - Fix gesture view
+- Can we pass showDebugControls instead? and show an inspector?
+- Angle increases as the offset changes
 
 
 ## Example Swift Code
