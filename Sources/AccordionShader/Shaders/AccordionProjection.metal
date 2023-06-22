@@ -66,9 +66,9 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float totalHeight = getTotalHeight(viewPort, sections, inverseOffset);
   float sectionHeight = getSectionHeight(totalHeight, sections);
 
-    if (position.y > totalHeight) {
-        return float2(-1,-1);
-    }
+//    if (position.y > totalHeight) {
+//        return float2(-1,-1);
+//    }
 
   Section section = getSection(position, viewPort, sectionHeight);
 
@@ -104,8 +104,8 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   float3 finalPosition = rotatedPosition + rotateAround;
 
   // Collapse
-  const float3 collapseAmount = float3(0.0, (sectionHeight * offset.y), 0.0);
-  finalPosition -= collapseAmount;
+  const float3 collapseAmount = float3(0.0, (viewPort.w * offset.y) / sections, 0.0);
+  finalPosition += collapseAmount;
 
   // Center coordinates
   finalPosition = finalPosition - (float3(viewSize, zPosition) * 0.5);

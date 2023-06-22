@@ -37,9 +37,9 @@ extension ExampleView: View {
             Text("Hello")
                 .font(.headline)
 
-//            Checkerboard(rows: 4, columns: 4)
-//                        .fill(.gray)
-//                        .frame(width: 300, height: 300)
+            Checkerboard(rows: 4, columns: 4)
+                        .fill(.gray)
+                        .frame(width: 300, height: 300)
         }
         .frame(width: 300, height: 300)
         .background(
