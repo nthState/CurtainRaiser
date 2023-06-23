@@ -31,8 +31,8 @@ extension ControlsView: View {
 
   private var offsetSlider: some View {
     HStack {
-        Text("control.offset \(control.yOffset)", bundle: .module)
-      Slider(value: $control.yOffset, in: 0...1)
+        Text("control.offset \(control.offset.y)", bundle: .module)
+        Slider(value: $control.offset.y, in: 0...1)
     }
   }
 

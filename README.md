@@ -24,14 +24,6 @@ may be parts that you do-not wish to install, so pick and choose what you need f
 
 
 ## Todo
-
-- What section am i in?
-  = yPosition mod sectionHeight
-  
-- What is the base of the rotation
-
-- What X direction are we folding in?
-  If the section id is even/odd
   
 - Debug view
   - Draw lines on the section breaks
@@ -40,14 +32,10 @@ may be parts that you do-not wish to install, so pick and choose what you need f
   It's not uniform, the ones at the top, move less than the ones at the bottom
   Can this be behind a flag
   
-- Debug should take a DEBUG configuration object
-- Debug should only be available in DEBUG builds
 - Get rid of that annoying UInt conversion
-- Fix gesture view
-- Can we pass showDebugControls instead? and show an inspector?
-- Angle increases as the offset changes
 - Something is wrong with the offset, one section rotates doesnt show colour moving
 - Deal with 0 sections
+- Add non-swiftui native version
 
 
 ## Example Swift Code
@@ -87,11 +75,9 @@ extension ContentView: View {
 
 ## Requirements / Parameters
 
-- Maximum indent before collapsing
-- Angle FOV when we rotate
-
 | Parameter | Detail |
 |----|----|
 | sections | The number of sections you want to collapse |
 | offset | How much to collapse in the range 0 to 1 |
 | enabled | If the shader is not enabled, then the view itself is rendered |
+| showDebugButton | If we want to debug the view we get access to a host of properties like camera position, field of view to help us debug |

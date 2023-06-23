@@ -1,6 +1,6 @@
 "common.reset" = "Reset";
-"control.offset %lf" = "Offset %lf";
-"control.sections %lf" = "Sections %lf";
+"control.offset %lf" = "Offset %l.2f";
+"control.sections %lf" = "Sections %.0lf";
 "control.shaderEnabled %@" = "Shader Enabled %@";
 "control.showDebugButton %@" = "Show Debug Button %@";
 "debug.angle %lf" = "Angle %.2lf";
@@ -11,4 +11,5 @@
 "debug.projection.farPlane %f" = "Far Plane %.2lf";
 "debug.projection.fov %f" = "Field of View %.2lf";
 "debug.projection.nearPlane %f" = "Near Plane %.2lf";
-"show.debug" = "Show Debug Inspector";
+"debug.view.title" = "Debug View";
+"show.toggle" = "Toggle Debug Inspector";

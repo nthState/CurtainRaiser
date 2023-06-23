@@ -10,10 +10,10 @@
 using namespace metal;
 
 struct Section {
-  float index;     // Section identifier
-  float top;
-  float bottom;
-  int direction; // Are we rotating in or out?
+  float index;      // Section identifier
+  float top;        // Top of the section
+  float bottom;     // Bottom of the section
+  int direction;    // Are we rotating in or out?
 };
 
 inline float degreesToRadians(float degrees) {
@@ -29,17 +29,17 @@ inline float getSectionHeight(float height, float sections) {
 }
 
 inline Section getSection(float2 position, float4 viewPort, float sectionHeight) {
-    float sectionIndex = floor(position.y / sectionHeight);
+  float sectionIndex = floor(position.y / sectionHeight);
 
-    float base = floor(sectionIndex * sectionHeight);
+  float base = floor(sectionIndex * sectionHeight);
 
-    Section section;
-    section.index = sectionIndex;
-    section.top = base;
-    section.bottom = base + sectionHeight;
-    section.direction = int(sectionIndex) % 2;
+  Section section;
+  section.index = sectionIndex;
+  section.top = base;
+  section.bottom = base + sectionHeight;
+  section.direction = int(sectionIndex) % 2;
 
-    return section;
+  return section;
 }
 
 #endif

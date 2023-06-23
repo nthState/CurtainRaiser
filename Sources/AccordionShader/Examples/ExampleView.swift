@@ -17,7 +17,7 @@ extension ExampleView: View {
         backgroundView
         foregroundView
           .accordion(sections: UInt(control.sections),
-                     offset: .init(x: 0, y: control.yOffset),
+                     offset: control.offset,
                      enabled: control.enable,
                      showDebugButton: control.showDebugButton)
       }

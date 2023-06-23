@@ -21,16 +21,16 @@ extension ExampleGestureView: View {
             .gesture(
               DragGesture()
                 .onChanged { gesture in
-                  control.yOffset = -(gesture.translation.height / proxy.size.height)
+                    control.offset.y = -(gesture.translation.height / proxy.size.height)
                 }
                 .onEnded { _ in
                   withAnimation(.spring()) {
-                    control.yOffset = 0
+                      control.offset.y = 0
                   }
                 }
             )
             .accordion(sections: UInt(control.sections),
-                       offset: .init(x: 0, y: control.yOffset),
+                       offset: control.offset,
                        enabled: control.enable,
                        showDebugButton: control.showDebugButton
                        )

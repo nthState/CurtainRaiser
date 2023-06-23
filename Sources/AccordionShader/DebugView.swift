@@ -23,6 +23,8 @@ extension DebugView: View {
   private var content: some View {
     VStack {
 
+      title
+
       Group {
         angleView
       }
@@ -38,12 +40,17 @@ extension DebugView: View {
         nearView
         farView
       }
+      
       Group {
         showGridLinesButton
       }
     }
     .font(.subheadline.monospaced())
     .padding()
+  }
+
+  private var title: some View {
+    Text("debug.view.title", bundle: .module)
   }
 
   private var showGridLinesButton: some View {
@@ -66,7 +73,7 @@ extension DebugView: View {
   private var cameraXView: some View {
     HStack {
       Text("debug.camera.x \(debugModel.cameraX)", bundle: .module)
-      Slider(value: $debugModel.cameraX, in: -180.0...180.0)
+      Slider(value: $debugModel.cameraX, in: -180.0...180.0, step: 5)
       Button(action: {
         debugModel.cameraX = 0
       }, label: {
@@ -78,7 +85,7 @@ extension DebugView: View {
   private var cameraYView: some View {
     HStack {
       Text("debug.camera.y \(debugModel.cameraY)", bundle: .module)
-      Slider(value: $debugModel.cameraY, in: -180.0...180.0)
+      Slider(value: $debugModel.cameraY, in: -180.0...180.0, step: 5)
       Button(action: {
         debugModel.cameraY = 0
       }, label: {
@@ -90,7 +97,7 @@ extension DebugView: View {
   private var cameraZView: some View {
     HStack {
       Text("debug.camera.z \(debugModel.cameraZ)", bundle: .module)
-      Slider(value: $debugModel.cameraZ, in: -10...150.0)
+      Slider(value: $debugModel.cameraZ, in: -10...150.0, step: 5)
       Button(action: {
         debugModel.cameraZ = 150
       }, label: {
@@ -102,7 +109,7 @@ extension DebugView: View {
   private var fovView: some View {
     HStack {
       Text("debug.projection.fov \(debugModel.fov)", bundle: .module)
-      Slider(value: $debugModel.fov, in: 0.0...360.0)
+      Slider(value: $debugModel.fov, in: 0.0...360.0, step: 5)
       Button(action: {
         debugModel.fov = 90
       }, label: {
@@ -126,7 +133,7 @@ extension DebugView: View {
   private var farView: some View {
     HStack {
       Text("debug.projection.farPlane \(debugModel.far)", bundle: .module)
-      Slider(value: $debugModel.far, in: 0.0...1000.0)
+      Slider(value: $debugModel.far, in: 0.0...1000.0, step: 5)
       Button(action: {
         debugModel.far = 1000.0
       }, label: {

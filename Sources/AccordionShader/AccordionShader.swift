@@ -105,7 +105,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
     Button(action: {
       showDebugInspector.toggle()
     }, label: {
-      Text("show.debug", bundle: .module)
+      Text("show.toggle", bundle: .module)
         .font(.subheadline.monospaced())
     })
     .padding()

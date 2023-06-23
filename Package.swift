@@ -13,10 +13,7 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "AccordionShader",
-      swiftSettings: [
-        .define("ENABLE_DEBUG", .when(configuration: .debug))
-      ]),
+      name: "AccordionShader"),
     .testTarget(
       name: "AccordionShaderTests",
       dependencies: ["AccordionShader"])
