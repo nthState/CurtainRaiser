@@ -38,8 +38,6 @@ public struct AccordionShader<V>: ViewModifier where V: View {
   @StateObject var debugModel = DebugModel()
   @State var showDebugInspector: Bool = false
 
-  @State var cameraZ: Float = 150
-
   public init(view: V,
               sections: UInt,
               offset: CGPoint,
@@ -60,7 +58,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
       .floatArray([Float(sections),
                    debugModel.cameraX,
                    debugModel.cameraY,
-                   cameraZ,
+                   debugModel.cameraZ,
                    Float(offset.x),
                    Float(offset.y.clamped(to: 0.0...1.0)),
                    debugModel.fov,
@@ -76,7 +74,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
       .floatArray([Float(sections),
                    debugModel.cameraX,
                    debugModel.cameraY,
-                   cameraZ,
+                   debugModel.cameraZ,
                    Float(offset.x),
                    Float(offset.y),
                    debugModel.fov,
@@ -114,7 +112,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
   }
 
   private var inspectorView: some View {
-    DebugView()
+    DebugView(offset: offset)
       .environmentObject(debugModel)
   }
 

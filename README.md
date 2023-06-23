@@ -47,6 +47,7 @@ may be parts that you do-not wish to install, so pick and choose what you need f
 - Can we pass showDebugControls instead? and show an inspector?
 - Angle increases as the offset changes
 - Something is wrong with the offset, one section rotates doesnt show colour moving
+- Deal with 0 sections
 
 
 ## Example Swift Code

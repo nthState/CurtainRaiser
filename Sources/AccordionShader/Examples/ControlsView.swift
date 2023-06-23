@@ -19,7 +19,6 @@ extension ControlsView: View {
       Group {
         sectionCount
         offsetSlider
-        angleView
       }
       Group {
         enableButton
@@ -32,21 +31,15 @@ extension ControlsView: View {
 
   private var offsetSlider: some View {
     HStack {
-      Text("Y Offset: \(control.yOffset, specifier: "%0.3f")")
+        Text("control.offset \(control.yOffset)", bundle: .module)
       Slider(value: $control.yOffset, in: 0...1)
     }
   }
 
   private var sectionCount: some View {
     HStack {
-      Text("Sections: \(control.sections, specifier: "%0.3f")")
+      Text("control.sections \(control.sections)", bundle: .module)
       Slider(value: $control.sections, in: 0...15, step: 1.0)
-    }
-  }
-
-  private var angleView: some View {
-    HStack {
-      Text("angle: \(90.0 * control.yOffset, specifier: "%0.3f")")
     }
   }
 
@@ -55,7 +48,7 @@ extension ControlsView: View {
       Button {
         control.enable.toggle()
       } label: {
-        Text("Shader enabled: \(control.enable.description)")
+        Text("control.shaderEnabled \(control.enable.description)", bundle: .module)
       }
     }
     .padding()
@@ -66,7 +59,7 @@ extension ControlsView: View {
       Button {
         control.showDebugButton.toggle()
       } label: {
-        Text("Show Debug Button: \(control.showDebugButton.description)")
+        Text("control.showDebugButton \(control.showDebugButton.description)", bundle: .module)
       }
     }
     .padding()
