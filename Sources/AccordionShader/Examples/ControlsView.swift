@@ -21,18 +21,6 @@ extension ControlsView: View {
         offsetSlider
         angleView
       }
-
-      Group {
-        cameraXView
-        cameraYView
-        cameraZView
-      }
-
-      Group {
-        fovView
-        nearView
-        farView
-      }
       Group {
         enableButton
         debugButton
@@ -56,13 +44,9 @@ extension ControlsView: View {
     }
   }
 
-  private var debugButton: some View {
+  private var angleView: some View {
     HStack {
-      Button {
-        control.debug.toggle()
-      } label: {
-        Text("Debug enabled: \(control.debug.description)")
-      }
+      Text("angle: \(90.0 * control.yOffset, specifier: "%0.3f")")
     }
   }
 
@@ -71,77 +55,23 @@ extension ControlsView: View {
       Button {
         control.enable.toggle()
       } label: {
-        Text("Distort enabled: \(control.enable.description)")
+        Text("Shader enabled: \(control.enable.description)")
       }
     }
     .padding()
   }
 
-  private var cameraXView: some View {
+  private var debugButton: some View {
     HStack {
-      Text("cameraX: \(control.cameraX, specifier: "%0.3f")")
-      Slider(value: $control.cameraX, in: -180.0...180.0)
-      Button("Reset") {
-        control.cameraX = 0.0
+      Button {
+        control.showDebugButton.toggle()
+      } label: {
+        Text("Show Debug Button: \(control.showDebugButton.description)")
       }
     }
+    .padding()
   }
 
-  private var cameraYView: some View {
-    HStack {
-      Text("cameraY: \(control.cameraY, specifier: "%0.3f")")
-      Slider(value: $control.cameraY, in: -180.0...180.0)
-      Button("Reset") {
-        control.cameraY = 0.0
-      }
-    }
-  }
-
-  private var cameraZView: some View {
-    HStack {
-      Text("cameraZ: \(control.cameraZ, specifier: "%0.3f")")
-      Slider(value: $control.cameraZ, in: -10...150.0)
-      Button("Reset") {
-        control.cameraZ = 0.0
-      }
-    }
-  }
-
-  private var angleView: some View {
-    HStack {
-      Text("angle: \(90.0 * control.yOffset, specifier: "%0.3f")")
-    }
-  }
-
-  private var fovView: some View {
-    HStack {
-      Text("fov: \(control.fov, specifier: "%0.3f")")
-      Slider(value: $control.fov, in: 0.0...360.0)
-      Button("Reset") {
-        control.fov = 90.0
-      }
-    }
-  }
-
-  private var nearView: some View {
-    HStack {
-      Text("near: \(control.near, specifier: "%0.3f")")
-      Slider(value: $control.near, in: -1.0...10)
-      Button("Reset") {
-        control.near = 0.01
-      }
-    }
-  }
-
-  private var farView: some View {
-    HStack {
-      Text("far: \(control.far, specifier: "%0.3f")")
-      Slider(value: $control.far, in: 0.0...1000.0)
-      Button("Reset") {
-        control.far = 1000.0
-      }
-    }
-  }
 }
 
 #Preview("Controls View") {

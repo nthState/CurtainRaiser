@@ -61,7 +61,7 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   const float fov_radians = degreesToRadians(data[6]);
   const float nearPlane = data[7];
   const float farPlane = data[8];
-  const float zPosition = 0.0;
+  const float zPosition = 500.0;
 
   float totalHeight = getTotalHeight(viewPort, sections, inverseOffset);
   float sectionHeight = getSectionHeight(totalHeight, sections);

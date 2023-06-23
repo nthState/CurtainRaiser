@@ -23,7 +23,7 @@ extension ExampleGestureView: View {
                 .onChanged { gesture in
                   control.yOffset = -(gesture.translation.height / proxy.size.height)
                 }
-                .onEnded { gesture in
+                .onEnded { _ in
                   withAnimation(.spring()) {
                     control.yOffset = 0
                   }
@@ -32,13 +32,8 @@ extension ExampleGestureView: View {
             .accordion(sections: UInt(control.sections),
                        offset: .init(x: 0, y: control.yOffset),
                        enabled: control.enable,
-                       debug: control.debug,
-                       fov: control.fov,
-                       cameraX: control.cameraX,
-                       cameraY: control.cameraY,
-                       cameraZ: control.cameraZ,
-                       near: control.near,
-                       far: control.far)
+                       showDebugButton: control.showDebugButton
+                       )
         }
       }
 
@@ -50,10 +45,6 @@ extension ExampleGestureView: View {
     ZStack {
       Text("Hello")
         .font(.headline)
-
-      //            Checkerboard(rows: 4, columns: 4)
-      //                        .fill(.gray)
-      //                        .frame(width: 300, height: 300)
     }
     .frame(width: 300, height: 300)
     .background(

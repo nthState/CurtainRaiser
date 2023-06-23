@@ -5,105 +5,117 @@
 import SwiftUI
 
 public extension View {
-    
-    /// Description
-    /// - Parameters:
-    ///   - sections: sections description
-    ///   - offset: offset description
-    ///   - enabled: enabled description
-    ///   - debug: debug description
-    ///   - fov: fov description
-    ///   - cameraX: cameraX description
-    ///   - cameraY: cameraY description
-    ///   - cameraZ: cameraZ description
-    ///   - near: near
-    ///   - far: far
-    /// - Returns: description
+
+  /// Description
+  /// - Parameters:
+  ///   - sections: sections description
+  ///   - offset: offset description
+  ///   - enabled: enabled description
+  ///   - showDebugButton: debug description
+  /// - Returns: description
   func accordion(sections: UInt,
                  offset: CGPoint,
                  enabled: Bool = true,
-                 debug: Bool = false,
-                 fov: Float = 90,
-                 cameraX: Float = 0,
-                 cameraY: Float = 0,
-                 cameraZ: Float = 0,
-                 near: Float = 0,
-                 far: Float = 0) -> some View {
+                 showDebugButton: Bool = false) -> some View {
     modifier(AccordionShader(view: self,
                              sections: sections,
                              offset: offset,
                              enabled: enabled,
-                             debug: debug,
-                             fov: fov,
-                             cameraX: cameraX,
-                             cameraY: cameraY,
-                             cameraZ: cameraZ,
-                             near: near,
-                             far: far))
+                             showDebugButton: showDebugButton))
   }
-  
+
 }
 
 public struct AccordionShader<V>: ViewModifier where V: View {
-  
+
   private let view: V
   private let enabled: Bool
-  private let debug: Bool
-  private let distortionShader: Shader
-  private let colorShader: Shader
-  
+  private let showDebugButton: Bool
+  private let library: ShaderLibrary
+  private let offset: CGPoint
+  private let sections: UInt
+
+  @StateObject var debugModel = DebugModel()
+  @State var showDebugInspector: Bool = false
+
+  @State var cameraZ: Float = 150
+
   public init(view: V,
               sections: UInt,
               offset: CGPoint,
               enabled: Bool = true,
-              debug: Bool,
-              fov: Float,
-              cameraX: Float,
-              cameraY: Float,
-              cameraZ: Float,
-              near: Float,
-              far: Float) {
+              showDebugButton: Bool = false) {
     self.view = view
     self.enabled = enabled
-    self.debug = debug
-    
-    let library: ShaderLibrary = .bundle(.module)
+    self.showDebugButton = showDebugButton
+    self.offset = offset
+    self.sections = sections
 
+    library = .bundle(.module)
+  }
+
+  private var distortionShader: Shader {
     let distortionShaderFunction = ShaderFunction(library: library, name: "accordionProjection")
-    self.distortionShader = Shader(function: distortionShaderFunction, arguments: [
-        .floatArray([Float(sections),
-                     cameraX,
-                     cameraY,
-                     cameraZ,
-                     Float(offset.x),
-                     Float(offset.y.clamped(to: 0.0...1.0)),
-                     fov,
-                     near,
-                     far]),
-      .boundingRect,
-    ])
-
-      //print(self.distortionShader)
-
-    let colorShaderFunction = ShaderFunction(library: library, name: "debug")
-    self.colorShader = Shader(function: colorShaderFunction, arguments: [
+    return Shader(function: distortionShaderFunction, arguments: [
       .floatArray([Float(sections),
-                   cameraX,
-                   cameraY,
+                   debugModel.cameraX,
+                   debugModel.cameraY,
+                   cameraZ,
+                   Float(offset.x),
+                   Float(offset.y.clamped(to: 0.0...1.0)),
+                   debugModel.fov,
+                   debugModel.near,
+                   debugModel.far]),
+      .boundingRect
+    ])
+  }
+
+  private var colorShader: Shader {
+    let colorShaderFunction = ShaderFunction(library: library, name: "debug")
+    return Shader(function: colorShaderFunction, arguments: [
+      .floatArray([Float(sections),
+                   debugModel.cameraX,
+                   debugModel.cameraY,
                    cameraZ,
                    Float(offset.x),
                    Float(offset.y),
-                   fov,
-                   near,
-                   far]),
-      .boundingRect,
+                   debugModel.fov,
+                   debugModel.near,
+                   debugModel.far]),
+      .boundingRect
     ])
   }
-  
+
   public func body(content: Content) -> some View {
-    view
-      .colorEffect(self.colorShader,isEnabled: debug)
-      .distortionEffect(self.distortionShader, maxSampleOffset: .zero, isEnabled: enabled)
+    ZStack(alignment: .bottomTrailing) {
+      view
+        .colorEffect(colorShader, isEnabled: debugModel.enableLinesShader)
+        .distortionEffect(distortionShader, maxSampleOffset: .zero, isEnabled: enabled)
+        .inspector(isPresented: $showDebugInspector) {
+          inspectorView
+            .presentationBackground(.thinMaterial)
+        }
+
+      if showDebugButton {
+        debugButtonView
+      }
+    }
+    .border(Color.black, width: 1)
   }
-  
+
+  private var debugButtonView: some View {
+    Button(action: {
+      showDebugInspector.toggle()
+    }, label: {
+      Text("Debug")
+        .font(.subheadline.monospaced())
+    })
+    .padding()
+  }
+
+  private var inspectorView: some View {
+    DebugView()
+      .environmentObject(debugModel)
+  }
+
 }

@@ -8,7 +8,7 @@ let package = Package(
   products: [
     .library(
       name: "AccordionShader",
-      targets: ["AccordionShader"]),
+      targets: ["AccordionShader"])
   ],
   targets: [
     .target(
@@ -18,6 +18,6 @@ let package = Package(
       ]),
     .testTarget(
       name: "AccordionShaderTests",
-      dependencies: ["AccordionShader"]),
+      dependencies: ["AccordionShader"])
   ]
 )

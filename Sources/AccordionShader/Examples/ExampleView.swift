@@ -5,60 +5,66 @@
 import SwiftUI
 
 struct ExampleView {
-    @StateObject var control = ControlViewModel()
+  @StateObject var control = ControlViewModel()
 }
 
 extension ExampleView: View {
 
-    public var body: some View {
-        VStack {
+  public var body: some View {
+    VStack {
 
-            ZStack {
-                backgroundView
-                foregroundView
-                    .accordion(sections: UInt(control.sections),
-                               offset: .init(x: 0, y: control.yOffset),
-                               enabled: control.enable,
-                               debug: control.debug,
-                               fov: control.fov,
-                               cameraX: control.cameraX,
-                               cameraY: control.cameraY,
-                               cameraZ: control.cameraZ,
-                               near: 0,
-                               far: 0)
-            }
+      ZStack {
+        backgroundView
+        foregroundView
+          .accordion(sections: UInt(control.sections),
+                     offset: .init(x: 0, y: control.yOffset),
+                     enabled: control.enable,
+                     showDebugButton: control.showDebugButton)
+      }
 
-            ControlsView(control: control)
-        }
+      ControlsView(control: control)
     }
+  }
 
-    private var foregroundView: some View {
-        ZStack {
-            Text("Hello")
-                .font(.headline)
+  private var foregroundView: some View {
+    ZStack {
+      Text("Hello")
+        .font(.headline)
 
-            Checkerboard(rows: 4, columns: 4)
-                        .fill(.gray)
-                        .frame(width: 300, height: 300)
-        }
+      Checkerboard(rows: 4, columns: 4)
+        .fill(.gray)
         .frame(width: 300, height: 300)
-        .background(
-            LinearGradient(gradient: Gradient(colors: [.green, .orange]), startPoint: .top, endPoint: .bottom)
-        )
     }
+    .frame(width: 300, height: 300)
+    .background(
+      LinearGradient(gradient: Gradient(colors: [.green, .orange]), startPoint: .top, endPoint: .bottom)
+    )
+  }
 
-    private var backgroundView: some View {
-        VStack {
-
-        }
-        .frame(width: 300, height: 300)
-        .background(Color.purple)
+  private var backgroundView: some View {
+    VStack {
+      EmptyView()
     }
+    .frame(width: 300, height: 300)
+    .background(Color.purple)
+  }
 
 }
 
 #if DEBUG
 #Preview("Example view") {
-    ExampleView() as! any View
+  ExampleView() as! any View
+//    .previewDevice("iPhone 14")
+//    .previewDisplayName("iPhone 14")
+//
+//  ExampleView()
+//    .previewDevice("iPad Pro (11-inch) (4th generation)")
+//    .previewInterfaceOrientation(.portrait)
+//    .previewDisplayName("iPad Portrait")
+//
+//  ExampleView()
+//    .previewDevice("iPad Pro (11-inch) (4th generation)")
+//    .previewInterfaceOrientation(.landscapeLeft)
+//    .previewDisplayName("iPad Portrait")
 }
 #endif
