@@ -21,27 +21,27 @@ extension DebugView: View {
   }
 
   private var content: some View {
-    VStack {
+    Form {
 
       title
 
-      Group {
+      Section {
         angleView
       }
 
-      Group {
+      Section {
         cameraXView
         cameraYView
         cameraZView
       }
 
-      Group {
+      Section {
         fovView
         nearView
         farView
       }
-      
-      Group {
+
+      Section {
         showGridLinesButton
       }
     }
@@ -97,7 +97,7 @@ extension DebugView: View {
   private var cameraZView: some View {
     HStack {
       Text("debug.camera.z \(debugModel.cameraZ)", bundle: .module)
-      Slider(value: $debugModel.cameraZ, in: -10...150.0, step: 5)
+      Slider(value: $debugModel.cameraZ, in: -180...180.0, step: 5)
       Button(action: {
         debugModel.cameraZ = 150
       }, label: {
@@ -133,7 +133,7 @@ extension DebugView: View {
   private var farView: some View {
     HStack {
       Text("debug.projection.farPlane \(debugModel.far)", bundle: .module)
-      Slider(value: $debugModel.far, in: 0.0...1000.0, step: 5)
+      Slider(value: $debugModel.far, in: 0.0...2000.0, step: 10)
       Button(action: {
         debugModel.far = 1000.0
       }, label: {

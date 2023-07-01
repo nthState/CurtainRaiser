@@ -34,6 +34,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
   private let library: ShaderLibrary
   private let offset: CGPoint
   private let sections: UInt
+    private let sampleOffset: CGSize
 
   @StateObject var debugModel = DebugModel()
   @State var showDebugInspector: Bool = false
@@ -48,6 +49,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
     self.showDebugButton = showDebugButton
     self.offset = offset
     self.sections = sections
+      self.sampleOffset = CGSize(width: 1000, height: 1000)
 
     library = .bundle(.module)
   }
@@ -88,7 +90,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
     ZStack(alignment: .bottomTrailing) {
       view
         .colorEffect(colorShader, isEnabled: debugModel.enableLinesShader)
-        .distortionEffect(distortionShader, maxSampleOffset: .zero, isEnabled: enabled)
+        .distortionEffect(distortionShader, maxSampleOffset: self.sampleOffset, isEnabled: enabled)
         .inspector(isPresented: $showDebugInspector) {
           inspectorView
             .presentationBackground(.thinMaterial)

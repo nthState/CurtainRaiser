@@ -31,7 +31,7 @@ extension ExampleView: View {
       Text("Hello")
         .font(.headline)
 
-      Checkerboard(rows: 4, columns: 4)
+        Checkerboard(rows: Int(control.checkerBoardSize), columns: Int(control.checkerBoardSize))
         .fill(.gray)
         .frame(width: 300, height: 300)
     }

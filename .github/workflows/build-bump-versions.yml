@@ -1,0 +1,70 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    
+
+concurrency:
+  group: "${{ github.ref }}_tag"
+  cancel-in-progress: true
+  
+env:
+  GITHUB_TOKEN: ${{ secrets.CI_BOT_PAT }}
+
+jobs:
+  bumpandtag:
+    name: Nightly Tag Build
+    runs-on: self-hosted
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: ./ios
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CI_BOT_PAT }}
+          
+      - name: Find version, build number and update
+        run: |
+          # Find build number and increment
+          CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+          ((CURRENT_PROJECT_VERSION+=1))
+          sed -i '' "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "Configuration/Version.xcconfig"
+
+          # Find version number
+          MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+
+          NEW_TAG="v$MARKETING_VERSION+$CURRENT_PROJECT_VERSION"
+          echo $NEW_TAG
+
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$CURRENT_PROJECT_VERSION" >> $GITHUB_ENV
+          
+      - name: Commit build number
+        run: |
+          git config --global user.email "${{ secrets.CI_BOT_EMAIL }}"
+          git config --global user.name "${{ secrets.CI_BOT_NAME }}"
+          git add "Configuration/Version.xcconfig"
+          git commit -m "bump: Build Number for nightly build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+          git push   
+
+      - name: Create tag
+        run: |
+          git tag ${{ env.NEW_TAG }}
+          git push origin ${{ env.NEW_TAG }}
+          
+    outputs:
+      NEW_TAG: ${{ env.NEW_TAG }}
+      BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
+          
+          
+  createrelease:
+    needs: bumpandtag
+    uses: ./.github/workflows/build-create-release.yml
+    secrets: inherit
+    with:
+      tag_name: ${{ needs.bumpandtag.outputs.NEW_TAG }}
+      build_number: ${{ needs.bumpandtag.outputs.BUILD_NUMBER }}

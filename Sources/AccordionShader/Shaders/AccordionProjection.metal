@@ -42,90 +42,95 @@ float4x4 generateViewMatrix(float3 cameraPosition) {
   return viewMatrix;
 }
 
+float4x4 rotateAroundXMatrix(float angle_radians) {
+  return float4x4(
+      float4(1.0, 0.0, 0.0, 0.0),
+      float4(0.0, cos(angle_radians), sin(angle_radians), 0.0),
+      float4(0.0, -sin(angle_radians), cos(angle_radians), 0.0),
+      float4(0.0, 0.0, 0.0, 1.0)
+  );
+}
+
+float4x4 translateTo(float4 position) {
+    return float4x4(
+        float4(1.0, 0.0, 0.0, 0.0),
+        float4(0.0, 1.0, 0.0, 0.0),
+        float4(0.0, 0.0, 1.0, 0.0),
+        float4(-position.x, -position.y, -position.z, position.w)
+    );
+}
+
 // MARK: Shader
 
 
+/**
+
+ Helpful links:
+ https://stackoverflow.com/questions/724219/how-to-convert-a-3d-point-into-2d-perspective-projection
+ */
 [[ stitchable ]] float2 accordionProjection(float2 position,
                                             device const float *data,
                                             int count,
                                             float4 viewPort
                                             ) {
 
-    const float maxAngle = 90.0;
+  const float maxAngle = 90.0;
   const float sections = data[0];
   const float3 cameraPosition = float3(data[1], data[2], data[3]);
   const float2 offset = float2(data[4], data[5]);
-    const float2 inverseOffset = float2(1.0-offset.x, 1.0-offset.y);
+  const float2 inverseOffset = float2(1.0-offset.x, 1.0-offset.y);
   const float2 viewSize = float2(viewPort.z, viewPort.w);
   const float aspectRatio = viewSize.x / viewSize.y;
   float angle_radians = degreesToRadians(maxAngle * offset.y);
   const float fov_radians = degreesToRadians(data[6]);
   const float nearPlane = data[7];
   const float farPlane = data[8];
-  const float zPosition = 600.0;
+  const float zPosition = 0;
 
-  float totalHeight = getTotalHeight(viewPort, sections, inverseOffset);
+  float totalHeight = viewPort.w; //getTotalHeight(viewPort, sections, float2(0.0,1.0));
   float sectionHeight = getSectionHeight(totalHeight, sections);
-
-//    if (position.y > totalHeight) {
-//        return float2(-1,-1);
-//    }
-
   Section section = getSection(position, viewPort, sectionHeight);
 
-  // Convert to center based co-ordinates
-  //float2 centerCoordinates = position - (viewSize * 0.5);
-
-  // Convert position to 3d space
-  float3 position3D = float3(position, zPosition);
+  float2 inPos = position - (viewSize * 0.5);
+  float4 originalPosition = float4(inPos.xy, zPosition, 1.0);
 
   // The point at which all points rotate around, ie, the top of the texture
-  //float3 rotateAround = float3(position3D.x, 0.0, 0.0);
-  float rotatePos = (section.direction == 0) ? section.top : section.bottom;
-  float3 rotateAround = float3(position3D.x, rotatePos, zPosition);
+  float rotateY = (section.direction == 0) ? section.top : section.bottom;
+  float4 rotationPoint = float4(position.x, rotateY, zPosition, 1.0);
+  rotationPoint.xy -= (viewSize * 0.5);
 
-  // Translation from center
-  float3 translatedPosition = position3D - rotateAround;
-
-  if (section.direction != 0) {
+  if (section.direction == 0) {
     angle_radians = -angle_radians;
   }
 
-  // Rotation matrix
-  float3x3 rotationMatrix = float3x3(
-                                     1.0, 0.0, 0.0,
-                                     0.0, cos(angle_radians), sin(angle_radians),
-                                     0.0, -sin(angle_radians), cos(angle_radians)
-                                     );
+  float4 move = float4(0, (totalHeight * offset.y), 0, 1);
 
-  // Apply rotation
-  float3 rotatedPosition = rotationMatrix * translatedPosition;
+  // MARK: Matrices
 
-  // Translate back to original position
-  float3 finalPosition = rotatedPosition + rotateAround;
+  const float4x4 viewMatrix = generateViewMatrix(cameraPosition);
 
-  // Collapse
-  const float3 collapseAmount = float3(0.0, (viewPort.w * offset.y) / sections, 0.0);
-  finalPosition += collapseAmount;
-
-  // Center coordinates
-  finalPosition = finalPosition - (float3(viewSize, zPosition) * 0.5);
-
-  float4x4 viewMatrix = generateViewMatrix(cameraPosition);
-
-  float4x4 projectionMatrix = generateProjectionMatrix(fov_radians,
+  const float4x4 projectionMatrix = generateProjectionMatrix(fov_radians,
                                                        aspectRatio,
                                                        nearPlane,
                                                        farPlane);
 
-  float4 clipSpacePosition = projectionMatrix * viewMatrix * float4(finalPosition, 1.0);
+  // https://chat.openai.com/c/fb490ef2-2e4a-4896-8aa5-59a9dd62569d
+  float4 clipSpacePosition = projectionMatrix
+                              * viewMatrix
+                              //* translateTo(move)
+                              //* translateTo(-originalPosition)
+                              * translateTo(-rotationPoint)
+                              * rotateAroundXMatrix(angle_radians)
+                              * translateTo(rotationPoint)
+                              //* translateTo(originalPosition)
+                              * originalPosition;
+
+  // MARK: Convert to screen coordinates
 
   float4 ndcPosition = clipSpacePosition / clipSpacePosition.w;
-
-  //https://stackoverflow.com/questions/724219/how-to-convert-a-3d-point-into-2d-perspective-projection
   float2 screenPosition;
-  screenPosition.x = (ndcPosition.x + 1.0) * 0.5 * viewSize.x;
-  screenPosition.y = (1.0 - ndcPosition.y) * 0.5 * viewSize.y;
+  screenPosition.x = (ndcPosition.x + 1.0) * (0.5 * viewSize.x);
+  screenPosition.y = (1.0 - ndcPosition.y) * (0.5 * viewSize.y);
 
   return screenPosition;
 

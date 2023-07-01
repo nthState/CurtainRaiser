@@ -1,0 +1,21 @@
+name: PR Title Checker
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, labeled, unlabeled]
+
+concurrency:
+  group: "${{ github.ref }}_title"
+  cancel-in-progress: true
+  
+jobs:
+  check:
+    runs-on: self-hosted
+    timeout-minutes: 3
+    steps:
+      - name: Check PR Title
+        uses: naveenk1223/action-pr-title@master
+        with:
+          regex: '.+' # Regex the title should match.
+          allowed_prefixes: 'feat,fix,ci,build,chore,style,docs,refactor,perf,test'
+          prefix_case_sensitive: false

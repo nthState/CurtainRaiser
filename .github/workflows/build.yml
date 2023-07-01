@@ -14,7 +14,7 @@ env:
   PACKAGE_NAME=Accordion
   REPOSITORY_NAME=Accordion
   OUTPUT_PATH=./docs
-  DEVELOPER_DIR: /Applications/Xcode_15.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15_beta2.app/Contents/Developer
   
 jobs:
   build:

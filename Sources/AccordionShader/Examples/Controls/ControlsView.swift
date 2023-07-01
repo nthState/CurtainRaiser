@@ -15,12 +15,15 @@ extension ControlsView: View {
   }
 
   private var content: some View {
-    VStack {
-      Group {
+    Form {
+      Section {
         sectionCount
         offsetSlider
       }
-      Group {
+        Section {
+            checkerBoardSizeView
+        }
+        Section {
         enableButton
         debugButton
       }
@@ -42,6 +45,13 @@ extension ControlsView: View {
       Slider(value: $control.sections, in: 0...15, step: 1.0)
     }
   }
+
+    private var checkerBoardSizeView: some View {
+      HStack {
+        Text("control.checkerBoardSize \(control.checkerBoardSize)", bundle: .module)
+        Slider(value: $control.checkerBoardSize, in: 0...16, step: 1.0)
+      }
+    }
 
   private var enableButton: some View {
     HStack {

@@ -1,0 +1,25 @@
+name: Workflow Cleanup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 01 * * 1-5' # UTC time
+  
+concurrency:
+  group: "${{ github.ref }}_cleanup"
+  cancel-in-progress: true
+    
+jobs:
+  cleanup:
+    name: Clean up Workflows
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+
+      - name: Delete old workflow runs
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        with:
+          repository: ${{ github.repository }}                 
+          older-than-seconds: 259200 # 3 days
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

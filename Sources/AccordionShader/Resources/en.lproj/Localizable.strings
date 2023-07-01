@@ -1,5 +1,6 @@
 "common.reset" = "Reset";
-"control.offset %lf" = "Offset %l.2f";
+"control.offset %lf" = "Offset %l.3f";
+"control.checkerBoardSize %lf" = "CheckerBoard Size %.0f";
 "control.sections %lf" = "Sections %.0lf";
 "control.shaderEnabled %@" = "Shader Enabled %@";
 "control.showDebugButton %@" = "Show Debug Button %@";
