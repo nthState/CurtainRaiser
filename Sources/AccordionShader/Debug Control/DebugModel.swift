@@ -11,6 +11,11 @@ class DebugModel: ObservableObject {
   @Published var cameraX: Float = 0
   @Published var cameraY: Float = 0
   @Published var cameraZ: Float = 150
+
+    @Published var lookAtX: Float = 0
+    @Published var lookAtY: Float = 0
+    @Published var lookAtZ: Float = 0
+    
   @Published var fov: Float = 90.0
 
   @Published var near: Float = 0.01

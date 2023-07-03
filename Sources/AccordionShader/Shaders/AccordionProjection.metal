@@ -24,9 +24,9 @@ float4x4 generateProjectionMatrix(float fov, float aspectRatio, float near, floa
   return projectionMatrix;
 }
 
-float4x4 generateViewMatrix(float3 cameraPosition) {
+float4x4 generateViewMatrix(float3 cameraPosition, float3 lookAt) {
   float3 eye = cameraPosition;
-  float3 target = float3(0.0, 0.0, 0.0); // Assuming the target is at the origin
+  float3 target = lookAt; // Assuming the target is at the origin
   float3 up = float3(0.0, 1.0, 0.0); // Up direction is positive Y-axis
 
   float3 zAxis = normalize(eye - target);
@@ -77,37 +77,46 @@ float4x4 translateTo(float4 position) {
   const float maxAngle = 90.0;
   const float sections = data[0];
   const float3 cameraPosition = float3(data[1], data[2], data[3]);
-  const float2 offset = float2(data[4], data[5]);
+  const float3 lookAt = float3(data[4], data[5], data[6]);
+  const float2 offset = float2(data[7], data[8]);
   const float2 inverseOffset = float2(1.0-offset.x, 1.0-offset.y);
   const float2 viewSize = float2(viewPort.z, viewPort.w);
   const float aspectRatio = viewSize.x / viewSize.y;
   float angle_radians = degreesToRadians(maxAngle * offset.y);
-  const float fov_radians = degreesToRadians(data[6]);
-  const float nearPlane = data[7];
-  const float farPlane = data[8];
+  const float fov_radians = degreesToRadians(data[9]);
+  const float nearPlane = data[10];
+  const float farPlane = data[11];
   const float zPosition = 0;
 
   float totalHeight = viewPort.w; //getTotalHeight(viewPort, sections, float2(0.0,1.0));
   float sectionHeight = getSectionHeight(totalHeight, sections);
   Section section = getSection(position, viewPort, sectionHeight);
 
+  float dynTotalHeight = getTotalHeight(viewPort, sections, inverseOffset.y);
+  float dynSectionHeight = getSectionHeight(dynTotalHeight, sections);
+  Section dynSection = getSection(position, viewPort, dynSectionHeight);
+
   float2 inPos = position - (viewSize * 0.5);
   float4 originalPosition = float4(inPos.xy, zPosition, 1.0);
 
   // The point at which all points rotate around, ie, the top of the texture
-  float rotateY = (section.direction == 0) ? section.top : section.bottom;
-  float4 rotationPoint = float4(position.x, rotateY, zPosition, 1.0);
+  //float rotateY = (section.direction == 0) ? section.top : section.bottom;
+  float4 rotationPoint = float4(position.x, 0, zPosition, 1.0);
   rotationPoint.xy -= (viewSize * 0.5);
 
   if (section.direction == 0) {
     angle_radians = -angle_radians;
   }
 
-  float4 move = float4(0, (totalHeight * offset.y), 0, 1);
+  //float4 move = float4(0, (totalHeight * offset.y), 0, 1);
 
   // MARK: Matrices
 
-  const float4x4 viewMatrix = generateViewMatrix(cameraPosition);
+  //const float3 cam = float3(0.0, 0, cameraPosition.z);
+  //const float3 lookAt = float3(0.0, 00, 0.0);
+
+  const float4x4 viewMatrix = generateViewMatrix(cameraPosition,
+                                                 lookAt);
 
   const float4x4 projectionMatrix = generateProjectionMatrix(fov_radians,
                                                        aspectRatio,

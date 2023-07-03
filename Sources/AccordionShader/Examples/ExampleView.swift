@@ -2,6 +2,7 @@
 //  Copyright © nthState Ltd 2023. All rights reserved.
 //
 
+import AVKit
 import SwiftUI
 
 struct ExampleView {
@@ -30,6 +31,8 @@ extension ExampleView: View {
     ZStack {
       Text("Hello")
         .font(.headline)
+
+//        VideoPlayer(player: AVPlayer(url: URL(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!))
 
         Checkerboard(rows: Int(control.checkerBoardSize), columns: Int(control.checkerBoardSize))
         .fill(.gray)

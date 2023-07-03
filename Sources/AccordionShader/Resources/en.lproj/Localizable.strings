@@ -8,6 +8,9 @@
 "debug.camera.x %f" = "Camera X %.2lf";
 "debug.camera.y %f" = "Camera Y %.2lf";
 "debug.camera.z %f" = "Camera Z %.2lf";
+"debug.lookAt.x %f" = "Look At X %.2lf";
+"debug.lookAt.y %f" = "Look At Y %.2lf";
+"debug.lookAt.z %f" = "Look At Z %.2lf";
 "debug.enableLinesShader %@" = "Enable lines shader: %@";
 "debug.projection.farPlane %f" = "Far Plane %.2lf";
 "debug.projection.fov %f" = "Field of View %.2lf";

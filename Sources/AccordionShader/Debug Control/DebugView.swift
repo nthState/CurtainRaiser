@@ -35,6 +35,12 @@ extension DebugView: View {
         cameraZView
       }
 
+        Section {
+          lookAtXView
+          lookAtYView
+          lookAtZView
+        }
+
       Section {
         fovView
         nearView
@@ -105,6 +111,42 @@ extension DebugView: View {
       })
     }
   }
+
+    private var lookAtXView: some View {
+      HStack {
+        Text("debug.lookAt.x \(debugModel.lookAtX)", bundle: .module)
+        Slider(value: $debugModel.lookAtX, in: -180.0...180.0, step: 5)
+        Button(action: {
+          debugModel.lookAtX = 0
+        }, label: {
+          Text("common.reset", bundle: .module)
+        })
+      }
+    }
+
+    private var lookAtYView: some View {
+      HStack {
+        Text("debug.lookAt.y \(debugModel.lookAtY)", bundle: .module)
+        Slider(value: $debugModel.lookAtY, in: -180.0...180.0, step: 5)
+        Button(action: {
+          debugModel.lookAtY = 0
+        }, label: {
+          Text("common.reset", bundle: .module)
+        })
+      }
+    }
+
+    private var lookAtZView: some View {
+      HStack {
+        Text("debug.lookAt.z \(debugModel.lookAtZ)", bundle: .module)
+        Slider(value: $debugModel.lookAtZ, in: -180...180.0, step: 5)
+        Button(action: {
+          debugModel.lookAtZ = 150
+        }, label: {
+          Text("common.reset", bundle: .module)
+        })
+      }
+    }
 
   private var fovView: some View {
     HStack {
