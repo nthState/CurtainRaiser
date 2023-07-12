@@ -1,19 +1,105 @@
 # Accordion | scruncher | collapse shader
 
+
+
+## Todo
+  
+- Rename
+- Fix overlay
+
+
 ## Table of contents
 
 1. [Introduction](#introduction)
-	1. [Tech Stack](#techstack)
+    1. [Example Usage](#example-usage)
+    2. [Parameters](#parameters)
 2. [Getting Started](#getting-started)
-    1. [New Developer Script](#newdev)
+    1. [New Developer Script](#new-developer)
+3. [Compatibility](#compatibility)
+4. [Building](#building)
+    1. [Building manually](#building-manually)
+    2. [Building the docs manually](#building-docs-manually)
+5. [Tests](#tests)
+	1. [Running the tests](#running-tests-manually)
+6. [Continuous Integration](#ci)
+7. [Create a Release](#release)
+8. [Older Attempts](#older-attempts)
 
+## Introduction <a name="introduction"></a>
 
+TODO: Gif
+
+### Example Usage <a name="example-usage"></a>
+
+```swift
+
+@Observable
+public class ControlViewModel {
+  var offset: CGPoint = CGPoint(x: 0.5, y: 0)
+  var sections: Int = 10
+  var maxShadow: Float = 0.1
+  var pleatHeight: Float = 4.0
+  var lift: Float = 0
+  var enable: Bool = true
+  }
+
+struct ContentView {
+  @State private var control = ControlViewModel()
+  @GestureState var dragOffset: CGSize
+}
+
+extension ContentView: View {
+
+  var body: some View {
+    content
+  }
+
+  private var content: some View {
+    VStack {
+      Text("Some text")
+      Image("gear")
+    }
+    .frame(width: 300, height: 300)
+    .gesture(
+      DragGesture()
+        .onChanged { gesture in
+          control.offset = CGPoint(x: (gesture.location.x / 300),
+                                   y: 1.0 - (gesture.location.y / 300))
+        }
+        .onEnded { _ in
+          withAnimation(.spring()) {
+            control.offset = CGPoint(x: 0.5, y: 0)
+          }
+        }
+    )
+    .accordion(sections: control.sections,
+               maxShadow: control.maxShadow,
+               pleatHeight: control.pleatHeight,
+               lift: control.lift,
+               offset: control.offset,
+               enabled: control.enable)
+  }
+
+}
+
+```
+
+### Parameters <a name="parameters"></a>
+
+| Parameter | Data Type | Detail |
+|----|----|----|
+| sections | Int | The number of sections you want to collapse |
+| maxShadow | Float | |
+| pleatHeight | Float | |
+| lift | Float | |
+| offset | CGPoint | How much to collapse in the range 0 to 1 |
+| enabled | Bool | If the shader is not enabled, then the view itself is rendered |
 
 ## Getting Started <a name="getting-started"></a>
 
 To get started as a new developer on the project, please follow the next steps
 
-## New Developer? <a name="newdev"></a>
+## New Developer? <a name="new-developer"></a>
 
 If you are a new developer to the project, we have a script you can run to install all dependencies, there
 may be parts that you do-not wish to install, so pick and choose what you need from the script
@@ -22,62 +108,73 @@ may be parts that you do-not wish to install, so pick and choose what you need f
 ./Scripts/new-developer.sh
 ```
 
+## Compatibility <a name="compatibility"></a>
 
-## Todo
-  
-- Debug view
-  - Draw lines on the section breaks
-  
-- How far shold the y position be shifted up as the offset changes
-  It's not uniform, the ones at the top, move less than the ones at the bottom
-  Can this be behind a flag
-  
-- Get rid of that annoying UInt conversion
-- Something is wrong with the offset, one section rotates doesnt show colour moving
-- Deal with 0 sections
-- Add non-swiftui native version
+This code works for `.iOS(.v17), .macOS(.v14), .visionOS(.v1)`, if you needed a version that worked on an older release, I suggest
+investigating Metal Shaders, whilst it's possible to do, via taking a screenshot of the view to apply the effect on. The overhead of
+constantly screenshoting (for animated content) may be too much, your mileage may vary
+
+## Building <a name="building"></a>
 
 
-## Example Swift Code
+### Building Manually <a name="building-manually"></a>
 
-```swift
-
-struct ContentView {
-	@GestureState var dragOffset: CGSize
-}
-
-extension ContentView: View {
-
-	var body: some View {
-		content
-	}
-
-	private var content: some View {
-		VStack {
-			Text("Some text")
-			Image("gear")
-		}
-		.gesture(
-			DragGesture()
-				.onChanged { gesture in
-					dragOffset = gesture.translation
-				}
-				.onEnded { gesture in
-					dragOffset = .zero
-				}
-		)
-		.accordion(sections: 12, offset: dragOffset, enabled: true)
-	}
-
-}
-
+```bash
+swift build
 ```
 
-## Requirements / Parameters
+### Building the Docs manually<a name="building-docs-manually"></a>
 
-| Parameter | Detail |
-|----|----|
-| sections | The number of sections you want to collapse |
-| offset | How much to collapse in the range 0 to 1 |
-| enabled | If the shader is not enabled, then the view itself is rendered |
-| showDebugButton | If we want to debug the view we get access to a host of properties like camera position, field of view to help us debug |
+```bash
+
+PACKAGE_NAME=Accordion
+REPOSITORY_NAME=Accordion
+OUTPUT_PATH=./docs
+  
+swift package --allow-writing-to-directory $OUTPUT_PATH \
+            generate-documentation --target $PACKAGE_NAME \
+            --disable-indexing \
+            --transform-for-static-hosting \
+            --hosting-base-path $REPOSITORY_NAME \
+            --output-path $OUTPUT_PATH
+```
+
+
+## Tests <a name="tests"></a>
+
+### Running the tests <a name="running-tests-manually"></a>
+
+```bash
+swift test
+```
+
+
+## Continuous Integration <a name="ci"></a>
+
+Continuous Integration (CI) runs every time you push up to the remote GitHub Repo, it will:
+
+- Check your PR title
+- Build the documentation
+- Auto assign the author
+- Run Swift lint
+
+## Create a release <a name="release"></a>
+
+If we want to bump the version number, we must:
+
+- Bump `Configuration/Version.xcconfig` version number
+- Commit to the repo
+
+When we create a new release, CI will:
+
+- Bump `Configuration/Version.xcconfig` build number
+- Create a tag
+- Generate the Change log
+- Create a release in GitHub
+
+## Older Attempts <a name="older-attempts"></a>
+
+If you `git checkout 9ee2a232943cd4e094382e4cb82120be76ea9c99` you can see that I tried to create this effect
+with projection/view/model matrix, by rotating each section and putting that section in the correct place.
+
+Whilst it initially looked ok, the perspective always failed.

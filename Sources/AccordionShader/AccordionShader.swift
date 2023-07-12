@@ -9,19 +9,25 @@ public extension View {
   /// Description
   /// - Parameters:
   ///   - sections: sections description
+  ///   - maxShadow: maxShadow description
+  ///   - pleatHeight: pleatHeight description
+  ///   - lift: lift description
   ///   - offset: offset description
   ///   - enabled: enabled description
-  ///   - showDebugButton: debug description
   /// - Returns: description
-  func accordion(sections: UInt,
+  func accordion(sections: Int,
+                 maxShadow: Float,
+                 pleatHeight: Float,
+                 lift: Float,
                  offset: CGPoint,
-                 enabled: Bool = true,
-                 showDebugButton: Bool = false) -> some View {
+                 enabled: Bool = true) -> some View {
     modifier(AccordionShader(view: self,
                              sections: sections,
+                             maxShadow: maxShadow,
+                             pleatHeight: pleatHeight,
+                             lift: lift,
                              offset: offset,
-                             enabled: enabled,
-                             showDebugButton: showDebugButton))
+                             enabled: enabled))
   }
 
 }
@@ -30,64 +36,44 @@ public struct AccordionShader<V>: ViewModifier where V: View {
 
   private let view: V
   private let enabled: Bool
-  private let showDebugButton: Bool
   private let library: ShaderLibrary
   private let offset: CGPoint
-  private let sections: UInt
-    private let sampleOffset: CGSize
+  private let sections: Int
+  @State private var sampleOffset = CGSize(width: 1000, height: 1000)
 
-  @StateObject var debugModel = DebugModel()
-  @State var showDebugInspector: Bool = false
+  private let maxShadow: Float
+  private let pleatHeight: Float
+  private let lift: Float
 
   public init(view: V,
-              sections: UInt,
+              sections: Int,
+              maxShadow: Float,
+              pleatHeight: Float,
+              lift: Float,
               offset: CGPoint,
-              enabled: Bool = true,
-              showDebugButton: Bool = false) {
+              enabled: Bool = true) {
     self.view = view
     self.enabled = enabled
-    self.showDebugButton = showDebugButton
     self.offset = offset
     self.sections = sections
-      self.sampleOffset = CGSize(width: 1000, height: 1000)
+
+    self.maxShadow = maxShadow
+    self.pleatHeight = pleatHeight
+    self.lift = lift
 
     library = .bundle(.module)
   }
 
-  private var distortionShader: Shader {
-    let distortionShaderFunction = ShaderFunction(library: library, name: "accordionProjection")
-    return Shader(function: distortionShaderFunction, arguments: [
+  private var layerShader: Shader {
+    let function = ShaderFunction(library: library, name: "layerShader")
+    return Shader(function: function, arguments: [
       .floatArray([Float(sections),
-                   debugModel.cameraX,
-                   debugModel.cameraY,
-                   debugModel.cameraZ,
-                   debugModel.lookAtX,
-                   debugModel.lookAtY,
-                   debugModel.lookAtZ,
-                   Float(offset.x),
+                   Float(offset.x.clamped(to: 0.0...1.0)),
                    Float(offset.y.clamped(to: 0.0...1.0)),
-                   debugModel.fov,
-                   debugModel.near,
-                   debugModel.far]),
-      .boundingRect
-    ])
-  }
-
-  private var colorShader: Shader {
-    let colorShaderFunction = ShaderFunction(library: library, name: "debug")
-    return Shader(function: colorShaderFunction, arguments: [
-      .floatArray([Float(sections),
-                   debugModel.cameraX,
-                   debugModel.cameraY,
-                   debugModel.cameraZ,
-                   debugModel.lookAtX,
-                   debugModel.lookAtY,
-                   debugModel.lookAtZ,
-                   Float(offset.x),
-                   Float(offset.y),
-                   debugModel.fov,
-                   debugModel.near,
-                   debugModel.far]),
+                   maxShadow,
+                   pleatHeight,
+                   lift
+                  ]),
       .boundingRect
     ])
   }
@@ -95,33 +81,16 @@ public struct AccordionShader<V>: ViewModifier where V: View {
   public func body(content: Content) -> some View {
     ZStack(alignment: .bottomTrailing) {
       view
-        .colorEffect(colorShader, isEnabled: debugModel.enableLinesShader)
-        .distortionEffect(distortionShader, maxSampleOffset: self.sampleOffset, isEnabled: enabled)
-        .inspector(isPresented: $showDebugInspector) {
-          inspectorView
-            .presentationBackground(.thinMaterial)
-        }
-
-      if showDebugButton {
-        debugButtonView
-      }
+        .layerEffect(layerShader, maxSampleOffset: self.sampleOffset, isEnabled: enabled)
+//        .overlay(GeometryReader { geometry in
+//          set(geometry: geometry)
+//        })
     }
-    .border(Color.black, width: 1)
   }
 
-  private var debugButtonView: some View {
-    Button(action: {
-      showDebugInspector.toggle()
-    }, label: {
-      Text("show.toggle", bundle: .module)
-        .font(.subheadline.monospaced())
-    })
-    .padding()
-  }
-
-  private var inspectorView: some View {
-    DebugView(offset: offset)
-      .environmentObject(debugModel)
+  private func set(geometry: GeometryProxy) -> some View {
+    self.sampleOffset = geometry.size
+    return Color.clear
   }
 
 }

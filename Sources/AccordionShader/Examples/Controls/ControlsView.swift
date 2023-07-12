@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct ControlsView {
-  @StateObject var control: ControlViewModel
+  @Binding var control: ControlViewModel
 }
 
 extension ControlsView: View {
@@ -17,15 +17,16 @@ extension ControlsView: View {
   private var content: some View {
     Form {
       Section {
-        sectionCount
         offsetSlider
       }
-        Section {
-            checkerBoardSizeView
-        }
-        Section {
+      Section {
+        sectionCount
+        maxShadow
+        pleatHeight
+        lift
+      }
+      Section {
         enableButton
-        debugButton
       }
     }
     .font(.subheadline.monospaced())
@@ -34,24 +35,46 @@ extension ControlsView: View {
 
   private var offsetSlider: some View {
     HStack {
-        Text("control.offset \(control.offset.y)", bundle: .module)
-        Slider(value: $control.offset.y, in: 0...1)
+      Text("control.offset \(control.offset.y)", bundle: .module)
+      Slider(value: $control.offset.y, in: 0...1)
     }
+  }
+
+  private var sectionsDouble: Binding<Double>{
+    Binding<Double>(get: {
+      return Double(control.sections)
+    }, set: {
+      control.sections = Int($0)
+    })
   }
 
   private var sectionCount: some View {
     HStack {
       Text("control.sections \(control.sections)", bundle: .module)
-      Slider(value: $control.sections, in: 0...15, step: 1.0)
+      Slider(value: sectionsDouble, in: 0...15, step: 1.0)
     }
   }
 
-    private var checkerBoardSizeView: some View {
-      HStack {
-        Text("control.checkerBoardSize \(control.checkerBoardSize)", bundle: .module)
-        Slider(value: $control.checkerBoardSize, in: 0...16, step: 1.0)
-      }
+  private var maxShadow: some View {
+    HStack {
+      Text("control.maxShadow \(control.maxShadow)", bundle: .module)
+      Slider(value: $control.maxShadow, in: 0...2)
     }
+  }
+  
+  private var pleatHeight: some View {
+    HStack {
+      Text("control.pleatHeight \(control.pleatHeight)", bundle: .module)
+      Slider(value: $control.pleatHeight, in: 0...5)
+    }
+  }
+
+  private var lift: some View {
+    HStack {
+      Text("control.lift \(control.lift)", bundle: .module)
+      Slider(value: $control.lift, in: 0...1)
+    }
+  }
 
   private var enableButton: some View {
     HStack {
@@ -61,22 +84,13 @@ extension ControlsView: View {
         Text("control.shaderEnabled \(control.enable.description)", bundle: .module)
       }
     }
-    .padding()
-  }
-
-  private var debugButton: some View {
-    HStack {
-      Button {
-        control.showDebugButton.toggle()
-      } label: {
-        Text("control.showDebugButton \(control.showDebugButton.description)", bundle: .module)
-      }
-    }
-    .padding()
   }
 
 }
 
-#Preview("Controls View") {
-  ControlsView(control: ControlViewModel()) as! any View
+#if DEBUG
+#Preview("Controls View, iPhone 14") {
+  ControlsView(control: .constant(ControlViewModel()))
+    .previewDevice("iPhone 14")
 }
+#endif

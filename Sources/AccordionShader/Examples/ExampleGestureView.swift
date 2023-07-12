@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct ExampleGestureView {
-  @StateObject var control = ControlViewModel()
+  @State private var control = ControlViewModel()
 }
 
 extension ExampleGestureView: View {
@@ -15,29 +15,28 @@ extension ExampleGestureView: View {
 
       ZStack(alignment: .center) {
         backgroundView
-        GeometryReader { proxy in
-          foregroundView
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .gesture(
-              DragGesture()
-                .onChanged { gesture in
-                    control.offset.y = -(gesture.translation.height / proxy.size.height)
+        foregroundView
+          .gesture(
+            DragGesture()
+              .onChanged { gesture in
+                control.offset = CGPoint(x: (gesture.location.x / 300),
+                                         y: 1.0 - (gesture.location.y / 300))
+              }
+              .onEnded { _ in
+                withAnimation(.spring()) {
+                  control.offset = CGPoint(x: 0.5, y: 0)
                 }
-                .onEnded { _ in
-                  withAnimation(.spring()) {
-                      control.offset.y = 0
-                  }
-                }
-            )
-            .accordion(sections: UInt(control.sections),
-                       offset: control.offset,
-                       enabled: control.enable,
-                       showDebugButton: control.showDebugButton
-                       )
-        }
+              }
+          )
+          .accordion(sections: control.sections,
+                     maxShadow: control.maxShadow,
+                     pleatHeight: control.pleatHeight,
+                     lift: control.lift,
+                     offset: control.offset,
+                     enabled: control.enable)
       }
 
-      ControlsView(control: control)
+      ControlsView(control: $control)
     }
   }
 
@@ -45,6 +44,8 @@ extension ExampleGestureView: View {
     ZStack {
       Text("Hello")
         .font(.headline)
+
+      AnimatingCircle()
     }
     .frame(width: 300, height: 300)
     .background(
@@ -53,16 +54,15 @@ extension ExampleGestureView: View {
   }
 
   private var backgroundView: some View {
-    VStack {
-      EmptyView()
-    }
-    .frame(width: 300, height: 300)
-    .background(Color.purple)
+    Rectangle()
+      .fill(Color.purple)
+      .frame(width: 300, height: 300)
   }
 }
 
 #if DEBUG
-#Preview("Example Gesture View") {
-  ExampleGestureView() as! any View
+#Preview("Example Gesture View, iPhone 14") {
+  ExampleGestureView()
+    .previewDevice("iPhone 14")
 }
 #endif

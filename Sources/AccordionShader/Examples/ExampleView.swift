@@ -6,7 +6,7 @@ import AVKit
 import SwiftUI
 
 struct ExampleView {
-  @StateObject var control = ControlViewModel()
+  @State private var control = ControlViewModel()
 }
 
 extension ExampleView: View {
@@ -17,13 +17,15 @@ extension ExampleView: View {
       ZStack {
         backgroundView
         foregroundView
-          .accordion(sections: UInt(control.sections),
+          .accordion(sections: control.sections,
+                     maxShadow: control.maxShadow,
+                     pleatHeight: control.pleatHeight,
+                     lift: control.lift,
                      offset: control.offset,
-                     enabled: control.enable,
-                     showDebugButton: control.showDebugButton)
+                     enabled: control.enable)
       }
 
-      ControlsView(control: control)
+      ControlsView(control: $control)
     }
   }
 
@@ -32,11 +34,7 @@ extension ExampleView: View {
       Text("Hello")
         .font(.headline)
 
-//        VideoPlayer(player: AVPlayer(url: URL(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!))
-
-        Checkerboard(rows: Int(control.checkerBoardSize), columns: Int(control.checkerBoardSize))
-        .fill(.gray)
-        .frame(width: 300, height: 300)
+      AnimatingCircle()
     }
     .frame(width: 300, height: 300)
     .background(
@@ -45,29 +43,27 @@ extension ExampleView: View {
   }
 
   private var backgroundView: some View {
-    VStack {
-      EmptyView()
-    }
-    .frame(width: 300, height: 300)
-    .background(Color.purple)
+    Rectangle()
+      .fill(Color.purple)
+      .frame(width: 300, height: 300)
   }
 
 }
 
 #if DEBUG
-#Preview("Example view") {
-  ExampleView() as! any View
-//    .previewDevice("iPhone 14")
-//    .previewDisplayName("iPhone 14")
-//
-//  ExampleView()
-//    .previewDevice("iPad Pro (11-inch) (4th generation)")
-//    .previewInterfaceOrientation(.portrait)
-//    .previewDisplayName("iPad Portrait")
-//
-//  ExampleView()
-//    .previewDevice("iPad Pro (11-inch) (4th generation)")
-//    .previewInterfaceOrientation(.landscapeLeft)
-//    .previewDisplayName("iPad Portrait")
+#Preview("Example View, iPhone 14") {
+  ExampleView()
+    .previewDevice("iPhone 14")
+}
+
+#Preview("iPad Pro (11-inch) (4th generation)") {
+  ExampleView()
+    .previewDevice("iPad Pro (11-inch) (4th generation)")
+}
+
+#Preview("iPad Pro (11-inch) (4th generation) Landscape") {
+  ExampleView()
+    .previewDevice("iPad Pro (11-inch) (4th generation)")
+    .previewInterfaceOrientation(.landscapeLeft)
 }
 #endif

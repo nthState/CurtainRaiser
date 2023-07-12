@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "AccordionShader",
   defaultLocalization: "en",
-  platforms: [.iOS(.v17), .macOS(.v14)],
+  platforms: [.iOS(.v17), .macOS(.v14), .visionOS(.v1)],
   products: [
     .library(
       name: "AccordionShader",

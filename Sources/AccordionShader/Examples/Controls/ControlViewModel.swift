@@ -3,11 +3,23 @@
 //
 
 import SwiftUI
+import Observation
 
-class ControlViewModel: ObservableObject {
-  @Published var sections: Double = 3
-  @Published var offset: CGPoint = .zero
-  @Published var enable: Bool = true
-  @Published var showDebugButton: Bool = true
-  @Published var checkerBoardSize: Double = 4
+@Observable
+public class ControlViewModel {
+  var offset: CGPoint = CGPoint(x: 0.5, y: 0)
+  var sections: Int = 10
+  var maxShadow: Float = 0.1
+  var pleatHeight: Float = 4.0
+  var lift: Float = 0
+  var enable: Bool = true
+
+  public init(offset: CGPoint = CGPoint(x: 0.5, y: 0), sections: Int = 10, maxShadow: Float = 0.1, pleatHeight: Float = 4.0, lift: Float = 0.5, enable: Bool = true) {
+    self.offset = offset
+    self.sections = sections
+    self.maxShadow = maxShadow
+    self.pleatHeight = pleatHeight
+    self.lift = lift
+    self.enable = enable
+  }
 }
