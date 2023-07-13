@@ -5,8 +5,9 @@
 ## Todo
   
 - Rename
-- Fix overlay
-
+- Move to parent org
+- Finish README
+- Fix the concept of getting started
 
 ## Table of contents
 
@@ -153,12 +154,15 @@ swift test
 
 Continuous Integration (CI) runs every time you push up to the remote GitHub Repo, it will:
 
+- Compile & Test the code
 - Check your PR title
 - Build the documentation
 - Auto assign the author
 - Run Swift lint
 
 ## Create a release <a name="release"></a>
+
+We can create GitHub sem-ver releases of this Swift Package by using the `build-bump-versions` GitHub Action, only Admins can do this.
 
 If we want to bump the version number, we must:
 

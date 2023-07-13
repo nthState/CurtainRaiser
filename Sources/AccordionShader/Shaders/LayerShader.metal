@@ -49,7 +49,7 @@ using namespace metal;
   uv.x += pleatZ * pleatHeight * grabPos.y / viewSize.x;
 
   if (uv.x < -1.0 || uv.y < -1.0 || uv.x > 1.0 || uv.y > 1.0) {
-    return half4(half3(0.0), 1.0);
+    return half4(0.0);
   }
 
   float3 shadow = pleatZ * maxShadow * clamp(grabPos.y * 2.0, 0.0, 1.0);

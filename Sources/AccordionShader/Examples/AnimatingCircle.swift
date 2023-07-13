@@ -13,7 +13,7 @@ struct AnimatingCircle: View {
 
   var body: some View {
     circle
-      .frame(width: 164)
+      .frame(width: 150)
       .animation(animation, value: drawingStroke)
       .onAppear {
         drawingStroke.toggle()
@@ -22,13 +22,11 @@ struct AnimatingCircle: View {
 
   private var circle: some View {
     Circle()
-      .stroke(style: StrokeStyle(lineWidth: 16))
-      .foregroundStyle(.tertiary)
+      .stroke(Color.blue, style: StrokeStyle(lineWidth: 16))
       .overlay {
         Circle()
           .trim(from: 0, to: drawingStroke ? 1 : 0)
-          .stroke(Color.red.gradient,
-                  style: StrokeStyle(lineWidth: 16, lineCap: .round))
+          .stroke(Color.red, style: StrokeStyle(lineWidth: 16, lineCap: .round))
       }
       .rotationEffect(.degrees(-90))
   }

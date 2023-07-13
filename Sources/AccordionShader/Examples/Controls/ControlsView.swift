@@ -40,7 +40,7 @@ extension ControlsView: View {
     }
   }
 
-  private var sectionsDouble: Binding<Double>{
+  private var sectionsDouble: Binding<Double> {
     Binding<Double>(get: {
       return Double(control.sections)
     }, set: {
@@ -61,7 +61,7 @@ extension ControlsView: View {
       Slider(value: $control.maxShadow, in: 0...2)
     }
   }
-  
+
   private var pleatHeight: some View {
     HStack {
       Text("control.pleatHeight \(control.pleatHeight)", bundle: .module)

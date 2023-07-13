@@ -1,7 +1,10 @@
+# pre-commit install --hook-type commit-msg --hook-type pre-push; pre-commit autoupdate
+# pre-commit run
+# pre-commit run --hook-stage commit-msg --commit-msg-filename .git/COMMIT_EDITMSG
 ---
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v2.39.1
+    rev: 3.5.2
     hooks:
       - id: commitizen
         
@@ -12,3 +15,12 @@ repos:
         entry: /opt/homebrew/bin/swiftlint . --strict --quiet true
         language: script
         pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: commit-message-check
+        name: Commit Message Check Shouldn't contain issue
+        language: pygrep
+        entry: '^.*issue.*$'
+        args: [--multiline]
+        stages: [commit-msg]

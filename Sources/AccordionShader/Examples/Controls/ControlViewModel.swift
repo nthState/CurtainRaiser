@@ -6,7 +6,7 @@ import SwiftUI
 import Observation
 
 @Observable
-public class ControlViewModel {
+internal class ControlViewModel {
   var offset: CGPoint = CGPoint(x: 0.5, y: 0)
   var sections: Int = 10
   var maxShadow: Float = 0.1
@@ -14,7 +14,7 @@ public class ControlViewModel {
   var lift: Float = 0
   var enable: Bool = true
 
-  public init(offset: CGPoint = CGPoint(x: 0.5, y: 0), sections: Int = 10, maxShadow: Float = 0.1, pleatHeight: Float = 4.0, lift: Float = 0.5, enable: Bool = true) {
+  internal init(offset: CGPoint = CGPoint(x: 0.5, y: 0), sections: Int = 10, maxShadow: Float = 0.1, pleatHeight: Float = 4.0, lift: Float = 0.5, enable: Bool = true) {
     self.offset = offset
     self.sections = sections
     self.maxShadow = maxShadow

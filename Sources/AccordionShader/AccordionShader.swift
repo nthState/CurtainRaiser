@@ -39,7 +39,7 @@ public struct AccordionShader<V>: ViewModifier where V: View {
   private let library: ShaderLibrary
   private let offset: CGPoint
   private let sections: Int
-  @State private var sampleOffset = CGSize(width: 1000, height: 1000)
+  @State private var sampleOffset: CGSize = .zero
 
   private let maxShadow: Float
   private let pleatHeight: Float
@@ -82,15 +82,23 @@ public struct AccordionShader<V>: ViewModifier where V: View {
     ZStack(alignment: .bottomTrailing) {
       view
         .layerEffect(layerShader, maxSampleOffset: self.sampleOffset, isEnabled: enabled)
-//        .overlay(GeometryReader { geometry in
-//          set(geometry: geometry)
-//        })
+        .overlay(GeometryReader { geometry in
+          Color.clear
+            .preference(key: SizePreferenceKey.self, value: geometry.size)
+        })
+        .onPreferenceChange(SizePreferenceKey.self) { size in
+          self.sampleOffset = size
+        }
     }
   }
 
-  private func set(geometry: GeometryProxy) -> some View {
-    self.sampleOffset = geometry.size
-    return Color.clear
-  }
+}
 
+struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+    value = CGSize(width: max(value.width, nextValue().width),
+                   height: max(value.height, nextValue().height))
+  }
 }
