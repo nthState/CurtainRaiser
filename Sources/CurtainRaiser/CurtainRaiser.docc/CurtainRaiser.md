@@ -1,4 +1,4 @@
-# ``AccordionShader``
+# ``CurtainRaiser``
 
 ccccc
 
@@ -10,7 +10,7 @@ ddddd
 
 @Links(visualStyle: detailedGrid) {
     - <doc:HowItWorks>
-    - <doc:Getting-Started-with-Accordion-Shader>
+    - <doc:Getting-Started-with-CurtainRaiser-Shader>
     - <doc:Integrating-with-a-Gesture>
 }
 

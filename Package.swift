@@ -3,19 +3,19 @@
 import PackageDescription
 
 let package = Package(
-  name: "AccordionShader",
+  name: "CurtainRaiser",
   defaultLocalization: "en",
   platforms: [.iOS(.v17), .macOS(.v14), .visionOS(.v1)],
   products: [
     .library(
-      name: "AccordionShader",
-      targets: ["AccordionShader"])
+      name: "CurtainRaiser",
+      targets: ["CurtainRaiser"])
   ],
   targets: [
     .target(
-      name: "AccordionShader"),
+      name: "CurtainRaiser"),
     .testTarget(
-      name: "AccordionShaderTests",
-      dependencies: ["AccordionShader"])
+      name: "CurtainRaiserTests",
+      dependencies: ["CurtainRaiser"])
   ]
 )

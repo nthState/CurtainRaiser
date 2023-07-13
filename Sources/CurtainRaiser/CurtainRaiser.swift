@@ -15,24 +15,24 @@ public extension View {
   ///   - offset: offset description
   ///   - enabled: enabled description
   /// - Returns: description
-  func accordion(sections: Int,
-                 maxShadow: Float,
-                 pleatHeight: Float,
-                 lift: Float,
-                 offset: CGPoint,
-                 enabled: Bool = true) -> some View {
-    modifier(AccordionShader(view: self,
-                             sections: sections,
-                             maxShadow: maxShadow,
-                             pleatHeight: pleatHeight,
-                             lift: lift,
-                             offset: offset,
-                             enabled: enabled))
+  func curtainRaiser(sections: Int,
+                     maxShadow: Float,
+                     pleatHeight: Float,
+                     lift: Float,
+                     offset: CGPoint,
+                     enabled: Bool = true) -> some View {
+    modifier(CurtainRaiser(view: self,
+                           sections: sections,
+                           maxShadow: maxShadow,
+                           pleatHeight: pleatHeight,
+                           lift: lift,
+                           offset: offset,
+                           enabled: enabled))
   }
 
 }
 
-public struct AccordionShader<V>: ViewModifier where V: View {
+public struct CurtainRaiser<V>: ViewModifier where V: View {
 
   private let view: V
   private let enabled: Bool

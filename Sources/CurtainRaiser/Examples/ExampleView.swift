@@ -17,7 +17,7 @@ extension ExampleView: View {
       ZStack {
         backgroundView
         foregroundView
-          .accordion(sections: control.sections,
+          .curtainRaiser(sections: control.sections,
                      maxShadow: control.maxShadow,
                      pleatHeight: control.pleatHeight,
                      lift: control.lift,

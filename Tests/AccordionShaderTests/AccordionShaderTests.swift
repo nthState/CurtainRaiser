@@ -3,9 +3,9 @@
 //
 
 import XCTest
-@testable import AccordionShader
+@testable import CurtainRaiser
 
-final class AccordionShaderTests: XCTestCase {
+final class CurtainRaiserTests: XCTestCase {
 
   func test_clamp_lowerbounds() throws {
 

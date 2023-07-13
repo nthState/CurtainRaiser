@@ -1,4 +1,4 @@
-@Tutorials(name: "Accordion Shader Tutorials") {
+@Tutorials(name: "CurtainRaiser Shader Tutorials") {
     @Intro(title: "Introduction") {
         Intro text
 
@@ -8,7 +8,7 @@
         Chapter 1...
 
         
-        @TutorialReference(tutorial: "doc:Getting-Started-with-Accordion-Shader")
+        @TutorialReference(tutorial: "doc:Getting-Started-with-CurtainRaiser-Shader")
     }
     
     @Chapter(name: "Chapter 2") {

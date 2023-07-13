@@ -1,10 +1,10 @@
-# Accordion | scruncher | collapse shader
+# CurtainRaiser
 
 
 
 ## Todo
   
-- Rename
+- Rename repoo
 - Move to parent org
 - Finish README
 - Fix the concept of getting started
@@ -73,7 +73,7 @@ extension ContentView: View {
           }
         }
     )
-    .accordion(sections: control.sections,
+    .curtainRaiser(sections: control.sections,
                maxShadow: control.maxShadow,
                pleatHeight: control.pleatHeight,
                lift: control.lift,
@@ -128,8 +128,8 @@ swift build
 
 ```bash
 
-PACKAGE_NAME=Accordion
-REPOSITORY_NAME=Accordion
+PACKAGE_NAME=CurtainRaiser
+REPOSITORY_NAME=CurtainRaiser
 OUTPUT_PATH=./docs
   
 swift package --allow-writing-to-directory $OUTPUT_PATH \
