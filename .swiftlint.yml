@@ -1,6 +1,6 @@
 disabled_rules: 
   - line_length
 opt_in_rules:
-  - sorted_imports=
+  - sorted_imports
   - indentation:
       spaces: 2

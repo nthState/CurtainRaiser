@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct AnimatingCircle: View {
+internal struct AnimatingCircle: View {
   @State private var drawingStroke = false
 
   private let animation = Animation
@@ -31,3 +31,9 @@ struct AnimatingCircle: View {
       .rotationEffect(.degrees(-90))
   }
 }
+
+#if DEBUG
+#Preview("AnimatingCircle") {
+  AnimatingCircle()
+}
+#endif

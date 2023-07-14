@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct ControlsView {
+internal struct ControlsView {
   @Binding var control: ControlViewModel
 }
 
@@ -89,8 +89,7 @@ extension ControlsView: View {
 }
 
 #if DEBUG
-#Preview("Controls View, iPhone 14") {
+#Preview("Controls View") {
   ControlsView(control: .constant(ControlViewModel()))
-    .previewDevice("iPhone 14")
 }
 #endif

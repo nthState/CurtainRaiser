@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct ExampleGestureView {
+private struct ExampleGestureView {
   @State private var control = ControlViewModel()
 }
 
@@ -47,6 +47,7 @@ extension ExampleGestureView: View {
 
       AnimatingCircle()
     }
+      // fix this ControlsView(control: $control)
     .frame(width: 300, height: 300)
     .background(
       LinearGradient(gradient: Gradient(colors: [.green, .orange]), startPoint: .top, endPoint: .bottom)
@@ -61,8 +62,7 @@ extension ExampleGestureView: View {
 }
 
 #if DEBUG
-#Preview("Example Gesture View, iPhone 14") {
+#Preview("Example Gesture View") {
   ExampleGestureView()
-    .previewDevice("iPhone 14")
 }
 #endif

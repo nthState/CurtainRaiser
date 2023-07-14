@@ -32,18 +32,23 @@ public extension View {
 
 }
 
-public struct CurtainRaiser<V>: ViewModifier where V: View {
+public struct CurtainRaiser<V>: ViewModifier, Animatable where V: View {
 
   private let view: V
   private let enabled: Bool
   private let library: ShaderLibrary
-  private let offset: CGPoint
+  private var offset: CGPoint
   private let sections: Int
   @State private var sampleOffset: CGSize = .zero
 
   private let maxShadow: Float
   private let pleatHeight: Float
   private let lift: Float
+
+  public var animatableData: AnimatablePair<CGFloat, CGFloat> {
+    get { AnimatablePair(offset.x, offset.y) }
+    set { offset = CGPoint(x: newValue.first, y: newValue.second) }
+  }
 
   public init(view: V,
               sections: Int,

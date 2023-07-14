@@ -1,7 +1,5 @@
 # CurtainRaiser
 
-
-
 ## Todo
   
 - Rename repoo
@@ -14,7 +12,7 @@
 1. [Introduction](#introduction)
     1. [Example Usage](#example-usage)
     2. [Parameters](#parameters)
-2. [Getting Started](#getting-started)
+2. [Contributing](#contributing)
     1. [New Developer Script](#new-developer)
 3. [Compatibility](#compatibility)
 4. [Building](#building)
@@ -96,7 +94,7 @@ extension ContentView: View {
 | offset | CGPoint | How much to collapse in the range 0 to 1 |
 | enabled | Bool | If the shader is not enabled, then the view itself is rendered |
 
-## Getting Started <a name="getting-started"></a>
+## Contributing <a name="contributing"></a>
 
 To get started as a new developer on the project, please follow the next steps
 

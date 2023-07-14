@@ -5,7 +5,7 @@
 import AVKit
 import SwiftUI
 
-struct ExampleView {
+private struct ExampleView {
   @State private var control = ControlViewModel()
 }
 
@@ -51,19 +51,7 @@ extension ExampleView: View {
 }
 
 #if DEBUG
-#Preview("Example View, iPhone 14") {
+#Preview("Example View") {
   ExampleView()
-    .previewDevice("iPhone 14")
-}
-
-#Preview("iPad Pro (11-inch) (4th generation)") {
-  ExampleView()
-    .previewDevice("iPad Pro (11-inch) (4th generation)")
-}
-
-#Preview("iPad Pro (11-inch) (4th generation) Landscape") {
-  ExampleView()
-    .previewDevice("iPad Pro (11-inch) (4th generation)")
-    .previewInterfaceOrientation(.landscapeLeft)
 }
 #endif

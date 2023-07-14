@@ -19,3 +19,11 @@ jobs:
           regex: '.+' # Regex the title should match.
           allowed_prefixes: 'feat,fix,ci,build,chore,style,docs,refactor,perf,test'
           prefix_case_sensitive: false
+          
+      - name: Check for invalid words
+        run: |
+            if [[ "${{ github.event.pull_request.title }}" =~ "issue" ]]
+            then
+              echo "The PR title contains an invalid word: issue - can you be more specific?"
+              exit 1
+            fi
