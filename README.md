@@ -19,7 +19,7 @@
 
 ## Introduction <a name="introduction"></a>
 
-![Demo of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4)
+https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4
 
 ### Example Usage <a name="example-usage"></a>
 
