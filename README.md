@@ -9,12 +9,12 @@
 2. [Contributing](#contributing)
     1. [Prerequisites](#prerequisites)
 3. [Compatibility](#compatibility)
-  1. [Limitations](#limitations)
+    1. [Limitations](#limitations)
 4. [Building](#building)
     1. [Building manually](#building-manually)
     2. [Building the docs manually](#building-docs-manually)
 5. [Tests](#tests)
-	1. [Running the tests](#running-tests-manually)
+    1. [Running the tests](#running-tests-manually)
 6. [Continuous Integration](#ci)
 7. [Create a Release](#release)
 8. [Older Attempts](#older-attempts)
@@ -26,7 +26,7 @@ A Curtain Shader effect in iOS17, use it to revel views underneath.
 
 | Screenshot | Gif | Video |
 |----|----|----|
-| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) | https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4 |
+| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) | [Download MP4 Video](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4) |
 
 ### Example Usage <a name="example-usage"></a>
 
