@@ -9,6 +9,7 @@
 2. [Contributing](#contributing)
     1. [Prerequisites](#prerequisites)
 3. [Compatibility](#compatibility)
+  1. [Limitations](#limitations)
 4. [Building](#building)
     1. [Building manually](#building-manually)
     2. [Building the docs manually](#building-docs-manually)
@@ -23,11 +24,9 @@
 
 A Curtain Shader effect in iOS17, use it to revel views underneath.
 
-| Screenshot | Gif |
-|----|----|
-| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) |
-
-https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4
+| Screenshot | Gif | Video |
+|----|----|----|
+| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) | https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4 |
 
 ### Example Usage <a name="example-usage"></a>
 
@@ -97,7 +96,7 @@ extension ContentView: View {
 
 ## Contributing <a name="contributing"></a>
 
-To get started as a new developer on the project, please follow the next steps
+To get started as a new contributor on the project, please follow the next steps
 
 ## Prerequisites <a name="prerequisites"></a>
 
@@ -110,9 +109,21 @@ may be parts that you do-not wish to install, so pick and choose what you need f
 
 ## Compatibility <a name="compatibility"></a>
 
-This code works for `.iOS(.v17), .macOS(.v14), .visionOS(.v1)`, if you needed a version that worked on an older release, I suggest
+This code compiles for `.iOS(.v17), .macOS(.v14), .visionOS(.v1)`, if you need a version that worked on an older release, I suggest
 investigating Metal Shaders, whilst it's possible to do, via taking a screenshot of the view to apply the effect on. The overhead of
 constantly screenshoting (for animated content) may be too much, your mileage may vary
+
+### Limitations <a name="limitations"></a>
+
+It appears that any views backed by native platform views won't work, ie, textfields, videos
+
+Note from `.drawingGroup`
+
+```
+Note: Views backed by native platform views may not render into the
+///   image. Instead, they log a warning and display a placeholder image to
+///   highlight the error.
+```
 
 ## Building <a name="building"></a>
 
