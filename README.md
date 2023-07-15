@@ -26,7 +26,7 @@ A Curtain Shader effect in iOS17, use it to revel views underneath.
 
 | Screenshot | Gif | Video |
 |----|----|----|
-| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) | [Download MP4 Video](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4) |
+| <img alt="creenshot of Curtain Raiser Shader in iOS 17" src="https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png" width="296" /> | <img alt="Gif of Curtain Raiser Shader in iOS 17" src="https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif" width="296" /> | [Download MP4 Video](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4) |
 
 ### Example Usage <a name="example-usage"></a>
 
@@ -192,5 +192,5 @@ Whilst it initially looked ok, the perspective always failed.
 
 ## Contact <a name="contact"></a>
 
-Hello! I'm Chris, you get in contact with me via my website: www.nthstate.com, or send me
-a message on Twitter: @nthState
+Hello! I'm Chris, you get in contact with me via my website: [www.nthState.com](https://www.nthState.com), or send me
+a message on Twitter: [@nthState](https://www.twitter.com/nthState)
