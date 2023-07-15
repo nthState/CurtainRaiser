@@ -16,10 +16,15 @@
 6. [Continuous Integration](#ci)
 7. [Create a Release](#release)
 8. [Older Attempts](#older-attempts)
+9. [Contact](#contact)
 
 ## Introduction <a name="introduction"></a>
 
-![Demo of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif)
+A Curtain Shader effect in iOS17, use it to revel views underneath.
+
+| Screenshot | Gif |
+|----|----|
+| ![Screenshot of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Screenshot.png) | ![Gif of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.gif) |
 
 https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4
 
@@ -83,10 +88,10 @@ extension ContentView: View {
 | Parameter | Data Type | Detail |
 |----|----|----|
 | sections | Int | The number of sections you want to collapse |
-| maxShadow | Float | |
-| pleatHeight | Float | |
-| lift | Float | |
-| offset | CGPoint | How much to collapse in the range 0 to 1 |
+| maxShadow | Float | The amount of shadow per section |
+| pleatHeight | Float | Height of the pleat |
+| lift | Float | How far the bottom pleat lifts up |
+| offset | CGPoint | How much to collapse in the range y: 0 to 1, x where the user is holding |
 | enabled | Bool | If the shader is not enabled, then the view itself is rendered |
 
 ## Contributing <a name="contributing"></a>
@@ -110,7 +115,6 @@ constantly screenshoting (for animated content) may be too much, your mileage ma
 
 ## Building <a name="building"></a>
 
-
 ### Building Manually <a name="building-manually"></a>
 
 ```bash
@@ -120,7 +124,6 @@ swift build
 ### Building the Docs manually<a name="building-docs-manually"></a>
 
 ```bash
-
 PACKAGE_NAME=CurtainRaiser
 REPOSITORY_NAME=CurtainRaiser
 OUTPUT_PATH=./docs
@@ -141,7 +144,6 @@ swift package --allow-writing-to-directory $OUTPUT_PATH \
 ```bash
 swift test
 ```
-
 
 ## Continuous Integration <a name="ci"></a>
 
@@ -175,3 +177,8 @@ If you `git checkout 9ee2a232943cd4e094382e4cb82120be76ea9c99` you can see that 
 with projection/view/model matrix, by rotating each section and putting that section in the correct place.
 
 Whilst it initially looked ok, the perspective always failed.
+
+## Contact <a name="contact"></a>
+
+Hello! I'm Chris, you get in contact with me via my website: www.nthstate.com, or send me
+a message on Twitter: @nthState
