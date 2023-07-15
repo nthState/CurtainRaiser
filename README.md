@@ -192,5 +192,5 @@ Whilst it initially looked ok, the perspective always failed.
 
 ## Contact <a name="contact"></a>
 
-Hello! I'm Chris, you get in contact with me via my website: [www.nthState.com](https://www.nthState.com), or send me
+Hello! I'm Chris, you get in contact with me via my website: [http://www.chrisdavis.com](http://www.chrisdavis.com), or send me
 a message on Twitter: [@nthState](https://www.twitter.com/nthState)
