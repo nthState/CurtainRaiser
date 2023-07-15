@@ -1,11 +1,4 @@
-# CurtainRaiser
-
-## Todo
-  
-- Rename repoo
-- Move to parent org
-- Finish README
-- Fix the concept of getting started
+# Curtain Raiser iOS 17 Shader
 
 ## Table of contents
 
@@ -13,7 +6,7 @@
     1. [Example Usage](#example-usage)
     2. [Parameters](#parameters)
 2. [Contributing](#contributing)
-    1. [New Developer Script](#new-developer)
+    1. [Prerequisites](#prerequisites)
 3. [Compatibility](#compatibility)
 4. [Building](#building)
     1. [Building manually](#building-manually)
@@ -26,7 +19,7 @@
 
 ## Introduction <a name="introduction"></a>
 
-TODO: Gif
+![Demo of Curtain Raiser Shader in iOS 17](https://github.com/nthState/Assets/raw/main/CurtainRaiser/Demo.mp4)
 
 ### Example Usage <a name="example-usage"></a>
 
@@ -98,9 +91,9 @@ extension ContentView: View {
 
 To get started as a new developer on the project, please follow the next steps
 
-## New Developer? <a name="new-developer"></a>
+## Prerequisites <a name="prerequisites"></a>
 
-If you are a new developer to the project, we have a script you can run to install all dependencies, there
+If you are a new contributor to the project, we have a script you can run to install all dependencies, there
 may be parts that you do-not wish to install, so pick and choose what you need from the script
 
 ```
