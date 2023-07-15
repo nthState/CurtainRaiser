@@ -4,3 +4,5 @@ opt_in_rules:
   - sorted_imports
   - indentation:
       spaces: 2
+excluded:
+  - .build
