@@ -186,7 +186,7 @@ When we create a new release, CI will:
 
 ## Older Attempts <a name="older-attempts"></a>
 
-If you `git checkout 9ee2a232943cd4e094382e4cb82120be76ea9c99` you can see that I tried to create this effect
+If you `git checkout` [9ee2a232943cd4e094382e4cb82120be76ea9c99](https://github.com/nthState/CurtainRaiser/commit/9ee2a232943cd4e094382e4cb82120be76ea9c99) you can see that I tried to create this effect
 with projection/view/model matrix, by rotating each section and putting that section in the correct place.
 
 Whilst it initially looked ok, the perspective always failed.

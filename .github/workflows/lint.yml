@@ -11,12 +11,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_15_beta2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.0.app/Contents/Developer
 
 jobs:
   lint:
     name: SwiftLint
-    runs-on: self-hosted
+    runs-on: macos-13
     timeout-minutes: 5
     steps:
 

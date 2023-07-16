@@ -11,15 +11,17 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PACKAGE_NAME=Accordion
-  REPOSITORY_NAME=Accordion
-  OUTPUT_PATH=./docs
-  DEVELOPER_DIR: /Applications/Xcode_15_beta2.app/Contents/Developer
+  GITHUB_EMAIL: "bot@nthstate.com"
+  GITHUB_USERNAME: "nthState-bot"
+  PACKAGE_NAME: CurtainRaiser
+  REPOSITORY_NAME: CurtainRaiser
+  OUTPUT_PATH: ./docs
+  DEVELOPER_DIR: /Applications/Xcode_15.0.app/Contents/Developer
   
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: macos-13
     timeout-minutes: 5
     steps:
 
@@ -29,42 +31,36 @@ jobs:
       - name: Build Package
         run: swift build
         
-  test:
-    name: Test
-    runs-on: self-hosted
-    timeout-minutes: 5
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Build Package
+      - name: Test Package
         run: swift test
-  
+        
   buildDocs:
     name: Build Docs
-    needs: Build
-    runs-on: self-hosted
+    needs: build
+    runs-on: macos-13
     if: github.ref != 'refs/heads/main'
     timeout-minutes: 5
     steps:
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ORG_BOT_PAT }}
         
       - name: Generate Documentation
         run:  |
-          swift package --allow-writing-to-directory $OUTPUT_PATH \
-            generate-documentation --target $PACKAGE_NAME \
+          swift package --allow-writing-to-directory ${{ env.OUTPUT_PATH }} \
+            generate-documentation --target ${{ env.PACKAGE_NAME }} \
             --disable-indexing \
             --transform-for-static-hosting \
-            --hosting-base-path $REPOSITORY_NAME \
-            --output-path $OUTPUT_PATH
+            --hosting-base-path ${{ env.REPOSITORY_NAME }} \
+            --output-path ${{ env.OUTPUT_PATH }}
             
       - name: Commit Documentation
         run: |
-          git config --global user.email "${{ secrets.CI_BOT_EMAIL }}"
-          git config --global user.name "${{ secrets.CI_BOT_NAME }}"
-          git add $OUTPUT_PATH
+          git config --global user.email "${{ env.GITHUB_EMAIL }}"
+          git config --global user.name "${{ env.GITHUB_USERNAME }}"
+          git add "${{ env.OUTPUT_PATH }}"
           git commit -m "docs: Update docs [skip ci]" || echo "No changes to commit"
           git push   

@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   assign-author:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
       - uses: toshimaru/auto-author-assign@v1.6.0

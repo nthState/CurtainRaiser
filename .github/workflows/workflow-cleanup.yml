@@ -12,7 +12,7 @@ concurrency:
 jobs:
   cleanup:
     name: Clean up Workflows
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
 
@@ -22,4 +22,4 @@ jobs:
           repository: ${{ github.repository }}                 
           older-than-seconds: 259200 # 3 days
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ORG_BOT_PAT }}

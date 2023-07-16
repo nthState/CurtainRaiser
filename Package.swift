@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "CurtainRaiser",
   defaultLocalization: "en",
-  platforms: [.iOS(.v17), .macOS(.v14), .visionOS(.v1)],
+  platforms: [.iOS(.v17), .macOS(.v14)],
   products: [
     .library(
       name: "CurtainRaiser",

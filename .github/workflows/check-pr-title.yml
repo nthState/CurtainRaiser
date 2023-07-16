@@ -10,7 +10,7 @@ concurrency:
   
 jobs:
   check:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
       - name: Check PR Title

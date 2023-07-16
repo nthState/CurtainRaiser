@@ -1,41 +1,39 @@
-name: Bump Version
+name: Bump Version, Create Changlog, Create Tag
 
 on:
   workflow_dispatch:
-    
 
 concurrency:
-  group: "${{ github.ref }}_tag"
-  cancel-in-progress: true
+  group: "${{ github.ref }}_bump"
+  cancel-in-progress: false
   
 env:
-  GITHUB_TOKEN: ${{ secrets.CI_BOT_PAT }}
+  VERSION_FILE: "Configuration/Version.xcconfig"
+  GITHUB_EMAIL: "bot@nthstate.com"
+  GITHUB_USERNAME: "nthState-bot"
 
 jobs:
-  bumpandtag:
-    name: Nightly Tag Build
-    runs-on: self-hosted
-    timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: ./ios
+  bumpchangelogtag:
+    name: Bump Version, Create Changlog, Create Tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
 
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.CI_BOT_PAT }}
+          token: ${{ secrets.ORG_BOT_PAT }}
           
       - name: Find version, build number and update
         run: |
           # Find build number and increment
-          CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+          CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "${{ env.VERSION_FILE }}" | cut -d'=' -f2 | tr -d ' ')
           ((CURRENT_PROJECT_VERSION+=1))
-          sed -i '' "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "Configuration/Version.xcconfig"
+          sed -i "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "${{ env.VERSION_FILE }}"
 
           # Find version number
-          MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+          MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "${{ env.VERSION_FILE }}" | cut -d'=' -f2 | tr -d ' ')
 
           NEW_TAG="v$MARKETING_VERSION+$CURRENT_PROJECT_VERSION"
           echo $NEW_TAG
@@ -43,28 +41,103 @@ jobs:
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$CURRENT_PROJECT_VERSION" >> $GITHUB_ENV
           
-      - name: Commit build number
+          
+      - name: Setup Git user
         run: |
-          git config --global user.email "${{ secrets.CI_BOT_EMAIL }}"
-          git config --global user.name "${{ secrets.CI_BOT_NAME }}"
-          git add "Configuration/Version.xcconfig"
-          git commit -m "bump: Build Number for nightly build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
-          git push   
-
+          git config --global user.email "${{ env.GITHUB_EMAIL }}"
+          git config --global user.name "${{ env.GITHUB_USERNAME }}"
+          git config --global --add --bool push.autoSetupRemote true
+          
       - name: Create tag
         run: |
           git tag ${{ env.NEW_TAG }}
           git push origin ${{ env.NEW_TAG }}
           
-    outputs:
-      NEW_TAG: ${{ env.NEW_TAG }}
-      BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
+      - name: Create Branch
+        run: |
+          git checkout -b release/${{ env.NEW_TAG }}
           
+      - name: Commit build number
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          git checkout release/${{ env.NEW_TAG }}
+          git add "${{ env.VERSION_FILE }}"
+          git commit -m "bump: Build Number to build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+          git push
+          git checkout main
+          git pull
+
+      - name: Update CHANGELOG
+        id: changelog
+        uses: Requarks/changelog-action@v1.5.0
+        with:
+          tag: ${{ env.NEW_TAG }}
+          excludeTypes: ""
+          includeInvalidCommits: true
+          token: ${{ secrets.ORG_BOT_PAT }}
           
-  createrelease:
-    needs: bumpandtag
-    uses: ./.github/workflows/build-create-release.yml
-    secrets: inherit
-    with:
-      tag_name: ${{ needs.bumpandtag.outputs.NEW_TAG }}
-      build_number: ${{ needs.bumpandtag.outputs.BUILD_NUMBER }}
+      - name: Delete tag
+        run: |
+          git tag -d ${{ env.NEW_TAG }}
+          git push --delete origin ${{ env.NEW_TAG }}
+          
+      - name: Show whats new
+        run: |
+          echo "${{ steps.changelog.outputs.changes }}"
+
+      - name: Commit CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          git checkout release/${{ env.NEW_TAG }}
+          git add "CHANGELOG.md"
+          git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+          git push
+    
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
+          echo $PR_URL
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+    
+      - name: Approve PR
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          gh pr review --approve ${{ env.PR_URL }}
+          
+      - name: Merge PR
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          #gh pr merge --squash ${{ env.PR_URL }}
+          
+      - name: Create tag
+        run: |
+          git checkout main
+          git pull
+          git tag ${{ env.NEW_TAG }}
+          git push origin ${{ env.NEW_TAG }}
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_TAG }}
+          draft: false
+          name: ${{ env.NEW_TAG }}
+          body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ secrets.ORG_BOT_PAT }}
+          
+      - name: Revert on failure
+        if: ${{ failure() }}
+        run: |
+          git checkout main
+          git tag -d ${{ env.NEW_TAG }}
+          git push --delete origin ${{ env.NEW_TAG }}
+          git branch -D release/${{ env.NEW_TAG }}
+          git push origin --delete release/${{ env.NEW_TAG }}
+          
+   
