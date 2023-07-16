@@ -30,10 +30,10 @@ jobs:
           # Find build number and increment
           CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "${{ env.VERSION_FILE }}" | cut -d'=' -f2 | tr -d ' ')
           ((CURRENT_PROJECT_VERSION+=1))
-          sed "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "${{ env.VERSION_FILE }}"
+          sed -i "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "${{ env.VERSION_FILE }}"
 
           # Find version number
-          MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+          MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "${{ env.VERSION_FILE }}" | cut -d'=' -f2 | tr -d ' ')
 
           NEW_TAG="v$MARKETING_VERSION+$CURRENT_PROJECT_VERSION"
           echo $NEW_TAG

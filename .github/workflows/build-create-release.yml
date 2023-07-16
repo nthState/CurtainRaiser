@@ -54,7 +54,7 @@ jobs:
       - name: Commit CHANGELOG.md
         run: |
           git pull
-          git checkout release/${{ env.NEW_TAG }}
+          git checkout release/${{ inputs.tag_name }}
           git add "CHANGELOG.md"
           git commit -m "docs: update CHANGELOG.md for ${{ inputs.tag_name }} [skip ci]" || echo "No changes to commit"
           git push
