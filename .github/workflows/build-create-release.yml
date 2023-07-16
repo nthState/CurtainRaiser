@@ -58,7 +58,7 @@ jobs:
           git pull
           git checkout release/${{ inputs.tag_name }}
           git add "CHANGELOG.md"
-          git commit -m "docs: update CHANGELOG.md for ${{ inputs.tag_name }} [skip ci]" || echo "No changes to commit"
+          git commit -s -m "docs: update CHANGELOG.md for ${{ inputs.tag_name }} [skip ci]" || echo "No changes to commit"
           git push
           
       - name: Create Pull Request
