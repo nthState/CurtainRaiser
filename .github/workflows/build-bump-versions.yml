@@ -48,12 +48,12 @@ jobs:
           git config --global --add --bool push.autoSetupRemote true
           git checkout -b release/${{ env.NEW_TAG }}
           git add "${{ env.VERSION_FILE }}"
-          git commit -s -m "bump: Build Number for build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+          git commit -S -m "bump: Build Number for build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push 
 
       - name: Create tag
         run: |
-          git tag -S ${{ env.NEW_TAG }}
+          git tag -s ${{ env.NEW_TAG }}
           git push origin ${{ env.NEW_TAG }}
           
     outputs:
