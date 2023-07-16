@@ -10,6 +10,7 @@ concurrency:
   
 env:
   GITHUB_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+  VERSION_FILE: "Configuration/Version.xcconfig"
 
 jobs:
   bumpandtag:
@@ -24,18 +25,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.ORG_BOT_PAT }}
           
-      - name: Create branch
-        run: |
-          git config --global user.email "bot@nthstate.com"
-          git config --global user.name "nthState-bot"
-          git checkout -b release/${{ env.NEW_TAG }}
-          
       - name: Find version, build number and update
         run: |
           # Find build number and increment
-          CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
+          CURRENT_PROJECT_VERSION=$(grep -w "CURRENT_PROJECT_VERSION" "${{ env.VERSION_FILE }}" | cut -d'=' -f2 | tr -d ' ')
           ((CURRENT_PROJECT_VERSION+=1))
-          sed "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "Configuration/Version.xcconfig"
+          sed "s/\(CURRENT_PROJECT_VERSION *= *\).*/\1$CURRENT_PROJECT_VERSION/" "${{ env.VERSION_FILE }}"
 
           # Find version number
           MARKETING_VERSION=$(grep -w "MARKETING_VERSION" "Configuration/Version.xcconfig" | cut -d'=' -f2 | tr -d ' ')
@@ -48,9 +43,13 @@ jobs:
           
       - name: Commit build number
         run: |
-          git add "Configuration/Version.xcconfig"
-          git commit -m "bump: Build Number for nightly build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
-          git push   
+          git config --global user.email "bot@nthstate.com"
+          git config --global user.name "nthState-bot"
+          git config --global --add --bool push.autoSetupRemote true
+          git checkout -b release/${{ env.NEW_TAG }}
+          git add "${{ env.VERSION_FILE }}"
+          git commit -m "bump: Build Number for build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+          git push 
 
       - name: Create tag
         run: |
