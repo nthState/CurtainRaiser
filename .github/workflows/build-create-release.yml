@@ -53,9 +53,15 @@ jobs:
  
       - name: Commit CHANGELOG.md
         run: |
+          git config --global user.email "bot@nthstate.com"
+          git config --global user.name "nthState-bot"
           git pull
           git checkout release/${{ inputs.tag_name }}
           git add "CHANGELOG.md"
           git commit -m "docs: update CHANGELOG.md for ${{ inputs.tag_name }} [skip ci]" || echo "No changes to commit"
           git push
+          
+      - name: Create Pull Request
+        run: |
+          gh pr create --base main --head release/${{ inputs.tag_name }} --title "build: release/${{ inputs.tag_name }}"
           
