@@ -14,7 +14,7 @@ env:
 jobs:
   bumpandtag:
     name: Nightly Tag Build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
       run:

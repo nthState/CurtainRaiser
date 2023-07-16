@@ -14,12 +14,11 @@ env:
   PACKAGE_NAME: CurtainRaiser
   REPOSITORY_NAME: CurtainRaiser
   OUTPUT_PATH: ./docs
-  DEVELOPER_DIR: /Applications/Xcode_15_beta4.app/Contents/Developer
   
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: macos-13
     timeout-minutes: 5
     steps:
 
@@ -31,7 +30,7 @@ jobs:
         
   test:
     name: Test
-    runs-on: self-hosted
+    runs-on: macos-13
     timeout-minutes: 5
     steps:
 
@@ -44,7 +43,7 @@ jobs:
   buildDocs:
     name: Build Docs
     needs: Build
-    runs-on: self-hosted
+    runs-on: macos-13
     if: github.ref != 'refs/heads/main'
     timeout-minutes: 5
     steps:
