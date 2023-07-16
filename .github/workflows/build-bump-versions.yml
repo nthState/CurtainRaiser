@@ -15,10 +15,7 @@ jobs:
   bumpandtag:
     name: Tag Build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: ./ios
+    timeout-minutes: 3
     steps:
 
       - name: Checkout
