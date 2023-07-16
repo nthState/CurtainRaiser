@@ -6,6 +6,7 @@
     1. [Example Usage](#example-usage)
     2. [Parameters](#parameters)
     3. [Documentation](https://nthstate.github.io/CurtainRaiser/documentation/curtainraiser)
+    4. [Tutorials](https://nthstate.github.io/CurtainRaiser/tutorials/tutorial-table-of-contents)
 2. [Contributing](#contributing)
     1. [Prerequisites](#prerequisites)
 3. [Compatibility](#compatibility)
