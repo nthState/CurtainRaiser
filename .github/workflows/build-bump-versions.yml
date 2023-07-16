@@ -44,6 +44,7 @@ jobs:
         run: |
           git config --global user.email "bot@nthstate.com"
           git config --global user.name "nthState-bot"
+          git checkout -b release/${{ env.NEW_TAG }}
           git add "Configuration/Version.xcconfig"
           git commit -m "bump: Build Number for nightly build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push   
