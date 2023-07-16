@@ -24,6 +24,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.ORG_BOT_PAT }}
           
+      - name: Create branch
+        run: |
+          git config --global user.email "bot@nthstate.com"
+          git config --global user.name "nthState-bot"
+          git checkout -b release/${{ env.NEW_TAG }}
+          
       - name: Find version, build number and update
         run: |
           # Find build number and increment
@@ -42,9 +48,6 @@ jobs:
           
       - name: Commit build number
         run: |
-          git config --global user.email "bot@nthstate.com"
-          git config --global user.name "nthState-bot"
-          git checkout -b release/${{ env.NEW_TAG }}
           git add "Configuration/Version.xcconfig"
           git commit -m "bump: Build Number for nightly build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push   
