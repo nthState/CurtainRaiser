@@ -1,21 +1,22 @@
-@Tutorials(name: "CurtainRaiser Shader Tutorials") {
+@Tutorials(name: "Curtain Raiser Tutorials") {
     @Intro(title: "Introduction") {
-        Intro text
-
+        How to get the most out of the Curtain Raiser View Modifier in iOS17
     }
     
-    @Chapter(name: "Chapter 1") {
-        Chapter 1...
-
+    @Chapter(name: "Adding Curtain Raiser to your project") {
+        How to add Curtain Raiser to your App or Swift Package
         
-        @TutorialReference(tutorial: "doc:Getting-Started-with-CurtainRaiser-Shader")
+        @Image(source: "Chapter1_TOC.png", alt: "accessible description")
+
+        @TutorialReference(tutorial: "doc:Adding-Curtain-Raiser-to-your-project")
     }
     
-    @Chapter(name: "Chapter 2") {
-        Chapter 2...
-
+    @Chapter(name: "Getting Started with Curtain Raiser") {
+        Configure parameters
         
-        @TutorialReference(tutorial: "doc:Integrating-with-a-Gesture")
+        @Image(source: "Chapter2_TOC.png", alt: "accessible description")
+
+        @TutorialReference(tutorial: "doc:Getting-Started-with-Curtain-Raiser")
     }
     
 }

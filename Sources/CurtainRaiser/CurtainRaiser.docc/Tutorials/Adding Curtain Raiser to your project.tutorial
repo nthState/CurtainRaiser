@@ -1,0 +1,52 @@
+@Tutorial(time: 1) {
+  
+  @Intro(title: "Add Curtain Raiser to your Project") {
+    CurtainRaiser is delivered as a Swift Package, whether you want to include in an App, or Swift Package yourself, it's straight forward to do.
+    @Image(source: "Chapter1_Background.png", alt: "accessible description")
+  }
+  
+  @Section(title: "Option A: Add to an App") {
+    @ContentAndMedia {
+      Add to your App
+      }
+      
+      @Steps {
+        @Step {
+          Navigate to Project > Package Dependencies
+          @Image(source: "Chapter1_01.png", alt: "Importing the Swift Package")
+          }
+          @Step {
+            Add `https://github.com/nthState/CurtainRaiser` as a Package Dependency
+            @Image(source: "Chapter1_02.png", alt: "Importing the Swift Package")
+          }
+          
+        }
+      }
+      
+  @Section(title: "Option B: Adding to a Swift Package") {
+        @ContentAndMedia {
+          Extend your existing Swift Package by adding the Curtain Raiser Package
+          }
+          
+          @Steps {
+            @Step {
+              Open your `Package.swift` file and find the `dependencies` section
+              
+              @Code(name: "Package.swift", file: "Chapter1_03.swift") {
+                
+              }
+            }
+            
+            @Step {
+              
+              Add ``CurtainRaiser`` to the `dependencies`, I host this project on GitHub.
+              
+              @Code(name: "Package.swift", file: "Chapter1_04.swift") {
+                
+              }
+            }
+            
+          }
+        }            
+        
+      }

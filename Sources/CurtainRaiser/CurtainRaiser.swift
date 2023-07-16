@@ -6,20 +6,20 @@ import SwiftUI
 
 public extension View {
 
-  /// Description
+  /// Animate a foreground view over a background view
   /// - Parameters:
-  ///   - sections: sections description
-  ///   - maxShadow: maxShadow description
-  ///   - pleatHeight: pleatHeight description
-  ///   - lift: lift description
-  ///   - offset: offset description
-  ///   - enabled: enabled description
-  /// - Returns: description
-  func curtainRaiser(sections: Int,
-                     maxShadow: Float,
-                     pleatHeight: Float,
-                     lift: Float,
-                     offset: CGPoint,
+  ///   - sections: The number of sections/pleats
+  ///   - maxShadow: How much shadow to apply
+  ///   - pleatHeight: The height of the pleat
+  ///   - lift: How much lift the bottom pleat raises, in relation to the x position
+  ///   - offset: 0 = no effect applied, 1 = full effect applied. Animate inbetween for the effect.
+  ///   - enabled: Should the shader be enabled?
+  /// - Returns: A modified view
+  func curtainRaiser(sections: Int = 10,
+                     maxShadow: Float = 0.1,
+                     pleatHeight: Float = 4.0,
+                     lift: Float = 0,
+                     offset: CGPoint = CGPoint(x: 0.5, y: 0),
                      enabled: Bool = true) -> some View {
     modifier(CurtainRaiser(view: self,
                            sections: sections,

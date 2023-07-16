@@ -1,0 +1,112 @@
+@Tutorial(time: 5) {
+  @Intro(title: "Getting Started with Curtain Raiser") {
+    Curtain Raiser is a faux effect that makes it look like your view is scrunching up much like
+    a curtain does in real life.
+    
+    @Image(source: "Chapter2_Background.png", alt: "accessible description")
+  }
+
+    @Section(title: "Add it to your View") {
+      @ContentAndMedia {
+        We'll need a view that has two views, one on top of the other, so we can reveal the one underneath.
+        }
+        
+        @Steps {
+          
+          @Step {
+            Start with the following setup
+            @Code(name: "ContentView.swift", file: "Chapter2_01.swift") {
+              @Image(source: "Chapter2_01.png", alt: "Default ContentView, blue screen")
+              }
+          }
+          
+          @Step {
+            Import Curtain Raiser
+            @Code(name: "ContentView.swift", file: "Chapter2_02.swift") {
+              @Image(source: "Chapter2_01.png", alt: "Default ContentView, blue screen")
+              }
+          }
+          
+          @Step {
+            Add the curtain raiser to the foreground view, that's the view we want to move up.
+            @Code(name: "ContentView.swift", file: "Chapter2_03.swift") {
+              @Image(source: "Chapter2_01.png", alt: "Default ContentView, blue screen")
+              }
+          }
+          
+          @Step {
+            Run the code, note the bottom has moved up
+            @Code(name: "ContentView.swift", file: "Chapter2_03.swift") {
+              @Image(source: "Chapter2_03.png", alt: "Slight movement at the bottom")
+            }
+          }
+          
+        }
+      }
+      
+  @Section(title: "Let's make it dynamic") {
+    @ContentAndMedia {
+      Next we'll learn how to control the effect with a DragGesture.
+      }
+      @Steps {
+        @Step {
+          Add the barebones DragGesture
+          @Code(name: "ContentView.swift", file: "Chapter2_04.swift") {
+            
+          }
+        }
+        
+        @Step {
+          Add a @State to save the offset of the users touch
+          @Code(name: "ContentView.swift", file: "Chapter2_05.swift") {
+            
+          }
+        }
+        
+        @Step {
+          Calculate a touchOffset and save it to the touchOffset @State
+          @Code(name: "ContentView.swift", file: "Chapter2_06.swift") {
+            
+          }
+        }
+        
+        @Step {
+          Supply the touchOffset to the Curtain Raiser Effect
+          @Code(name: "ContentView.swift", file: "Chapter2_07.swift") {
+            
+          }
+        }
+        @Step {
+          Add the drag gesture to the view
+          @Code(name: "ContentView.swift", file: "Chapter2_08.swift") {
+            @Image(source: "Chapter2_08.png", alt: "Moving with a gesture")
+          }
+        }
+        
+        
+        }
+    }
+    
+    @Section(title: "Other ") {
+      @ContentAndMedia {
+        There are other parameters that we can use
+        }
+        @Steps {
+          @Step {
+            Change the number of sections
+            @Code(name: "ContentView.swift", file: "Chapter2_09.swift") {
+              @Image(source: "Chapter2_09.png", alt: "Changing section count")
+            }
+          }
+          
+          @Step {
+            Change how high the bottom pleat raises, default is 0
+            @Code(name: "ContentView.swift", file: "Chapter2_10.swift") {
+              @Image(source: "Chapter2_10.png", alt: "Changing bottom lift height")
+            }
+          }
+          }
+        }
+    
+  }
+}
