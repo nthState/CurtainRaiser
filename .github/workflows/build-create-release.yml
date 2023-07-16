@@ -63,5 +63,5 @@ jobs:
           
       - name: Create Pull Request
         run: |
-          gh pr create --base main --head release/${{ inputs.tag_name }} --title "build: release/${{ inputs.tag_name }}"
+          gh pr create --base main --head release/${{ inputs.tag_name }} --title "build: release/${{ inputs.tag_name }}" --body "BOT: build: release/${{ inputs.tag_name }}"
           
