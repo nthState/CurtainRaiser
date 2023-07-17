@@ -48,9 +48,10 @@ jobs:
           git config --global user.name "${{ env.GITHUB_USERNAME }}"
           git config --global --add --bool push.autoSetupRemote true
           
-                
       - name: Create tag
         run: |
+          git config --global user.email "${{ env.GITHUB_EMAIL }}"
+          git config --global user.name "${{ env.GITHUB_USERNAME }}"
           git tag ${{ env.NEW_TAG }}
           git push origin ${{ env.NEW_TAG }}
           
