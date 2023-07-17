@@ -48,10 +48,10 @@ jobs:
           git config --global user.name "${{ env.GITHUB_USERNAME }}"
           git config --global --add --bool push.autoSetupRemote true
           
-      - name: Create tag
-        run: |
-          git tag ${{ env.NEW_TAG }}
-          git push origin ${{ env.NEW_TAG }}
+#      - name: Create tag
+#        run: |
+#          git tag ${{ env.NEW_TAG }}
+#          git push origin ${{ env.NEW_TAG }}
           
       - name: Create Branch
         run: |
@@ -64,38 +64,40 @@ jobs:
           git checkout release/${{ env.NEW_TAG }}
           git add "${{ env.VERSION_FILE }}"
           git commit -m "bump: Build Number to build ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
-          git push 
-
-      - name: Update CHANGELOG
-        id: changelog
-        uses: Requarks/changelog-action@v1.5.0
-        with:
-          tag: release/${{ env.NEW_TAG }}
-          excludeTypes: ""
-          includeInvalidCommits: true
-          token: ${{ secrets.ORG_BOT_PAT }}
-          
-      - name: Show whats new
-        run: |
-          echo "${{ steps.changelog.outputs.changes }}"
- 
-      - name: Commit CHANGELOG.md
-        env:
-          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
-        run: |
-          git checkout release/${{ env.NEW_TAG }}
-          git add "CHANGELOG.md"
-          git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push
+          git checkout main
+          git pull
+
+     - name: Update CHANGELOG
+       id: changelog
+       uses: Requarks/changelog-action@v1.5.0
+       with:
+         tag: release/${{ env.NEW_TAG }}
+         excludeTypes: ""
+         includeInvalidCommits: true
+         token: ${{ secrets.ORG_BOT_PAT }}
           
-#      - name: Create Pull Request
+#      - name: Show whats new
+#        run: |
+#          echo "${{ steps.changelog.outputs.changes }}"
+ 
+#      - name: Commit CHANGELOG.md
 #        env:
 #          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
 #        run: |
-#          PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
-#          echo $PR_URL
-#          #gh pr review $PR_URL --approve
-#          #gh pr merge $PR_URL --squash
+#          git checkout release/${{ env.NEW_TAG }}
+#          git add "CHANGELOG.md"
+#          git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
+#          git push
+          
+     - name: Create Pull Request
+       env:
+         GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+       run: |
+         PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
+         echo $PR_URL
+         #gh pr review $PR_URL --approve
+         #gh pr merge $PR_URL --squash
           
 #      - name: Create Release
 #        uses: softprops/action-gh-release@v1
@@ -110,8 +112,8 @@ jobs:
         if: ${{ failure() }}
         run: |
           git checkout main
-          git tag -d ${{ env.NEW_TAG }}
-          git push --delete origin ${{ env.NEW_TAG }}
+#          git tag -d ${{ env.NEW_TAG }}
+#          git push --delete origin ${{ env.NEW_TAG }}
           git branch -D release/${{ env.NEW_TAG }}
           git push origin --delete release/${{ env.NEW_TAG }}
           
