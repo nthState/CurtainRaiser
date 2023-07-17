@@ -85,6 +85,8 @@ jobs:
           git push
           
       - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
         run: |
           PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
           echo $PR_URL
@@ -102,6 +104,7 @@ jobs:
       - name: Revert on failure
         if: ${{ failure() }}
         run: |
+          git checkout main
           git tag -d ${{ env.NEW_TAG }}
           git push --delete origin ${{ env.NEW_TAG }}
           git branch -D release/${{ env.NEW_TAG }}
