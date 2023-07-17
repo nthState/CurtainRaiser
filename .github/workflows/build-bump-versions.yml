@@ -41,17 +41,18 @@ jobs:
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$CURRENT_PROJECT_VERSION" >> $GITHUB_ENV
           
-                
-      - name: Create tag
-        run: |
-          git tag ${{ env.NEW_TAG }}
-          git push origin ${{ env.NEW_TAG }}
           
       - name: Setup Git user
         run: |
           git config --global user.email "${{ env.GITHUB_EMAIL }}"
           git config --global user.name "${{ env.GITHUB_USERNAME }}"
           git config --global --add --bool push.autoSetupRemote true
+          
+                
+      - name: Create tag
+        run: |
+          git tag ${{ env.NEW_TAG }}
+          git push origin ${{ env.NEW_TAG }}
           
       - name: Create Branch
         run: |
