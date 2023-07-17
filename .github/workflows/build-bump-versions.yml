@@ -58,6 +58,8 @@ jobs:
           git checkout -b release/${{ env.NEW_TAG }}
           
       - name: Commit build number
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
         run: |
           git checkout release/${{ env.NEW_TAG }}
           git add "${{ env.VERSION_FILE }}"
@@ -68,7 +70,7 @@ jobs:
         id: changelog
         uses: Requarks/changelog-action@v1.5.0
         with:
-          tag: ${{ env.NEW_TAG }}
+          tag: release/${{ env.NEW_TAG }}
           excludeTypes: ""
           includeInvalidCommits: true
           token: ${{ secrets.ORG_BOT_PAT }}
@@ -78,29 +80,31 @@ jobs:
           echo "${{ steps.changelog.outputs.changes }}"
  
       - name: Commit CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
         run: |
           git checkout release/${{ env.NEW_TAG }}
           git add "CHANGELOG.md"
           git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push
           
-      - name: Create Pull Request
-        env:
-          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
-        run: |
-          PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
-          echo $PR_URL
-          #gh pr review $PR_URL --approve
-          #gh pr merge $PR_URL --squash
+#      - name: Create Pull Request
+#        env:
+#          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+#        run: |
+#          PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
+#          echo $PR_URL
+#          #gh pr review $PR_URL --approve
+#          #gh pr merge $PR_URL --squash
           
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.NEW_TAG }}
-          draft: false
-          name: ${{ env.NEW_TAG }}
-          body: ${{ steps.changelog.outputs.changes }}
-          token: ${{ secrets.ORG_BOT_PAT }}
+#      - name: Create Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          tag_name: ${{ env.NEW_TAG }}
+#          draft: false
+#          name: ${{ env.NEW_TAG }}
+#          body: ${{ steps.changelog.outputs.changes }}
+#          token: ${{ secrets.ORG_BOT_PAT }}
           
       - name: Revert on failure
         if: ${{ failure() }}
