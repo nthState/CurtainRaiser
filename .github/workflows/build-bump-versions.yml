@@ -106,17 +106,19 @@ jobs:
           
       - name: Create tag
         run: |
+          git checkout main
+          git pull
           git tag ${{ env.NEW_TAG }}
           git push origin ${{ env.NEW_TAG }}
           
-#      - name: Create Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          tag_name: ${{ env.NEW_TAG }}
-#          draft: false
-#          name: ${{ env.NEW_TAG }}
-#          body: ${{ steps.changelog.outputs.changes }}
-#          token: ${{ secrets.ORG_BOT_PAT }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_TAG }}
+          draft: false
+          name: ${{ env.NEW_TAG }}
+          body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ secrets.ORG_BOT_PAT }}
           
       - name: Revert on failure
         if: ${{ failure() }}
