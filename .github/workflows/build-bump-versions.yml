@@ -96,6 +96,8 @@ jobs:
           git push
     
       - name: Create PR
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
           echo $PR_URL
