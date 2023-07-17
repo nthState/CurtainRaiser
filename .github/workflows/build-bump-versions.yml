@@ -94,15 +94,19 @@ jobs:
           git add "CHANGELOG.md"
           git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
           git push
-          
-      - name: Create Pull Request, Approve
-        env:
-          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+    
+      - name: Create PR
         run: |
           PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
           echo $PR_URL
-          gh pr review $PR_URL --approve
-          #gh pr merge $PR_URL --squash
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+    
+      - name: Approve PR
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          gh pr review --approve ${{ env.PR_URL }}
+          #gh pr merge --squash  ${{ env.PR_URL }}
           
       - name: Create tag
         run: |
