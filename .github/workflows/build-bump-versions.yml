@@ -8,7 +8,6 @@ concurrency:
   cancel-in-progress: false
   
 env:
-  GITHUB_TOKEN: ${{ secrets.ORG_BOT_PAT }}
   VERSION_FILE: "Configuration/Version.xcconfig"
   GITHUB_EMAIL: "bot@nthstate.com"
   GITHUB_USERNAME: "nthState-bot"
@@ -72,6 +71,7 @@ jobs:
           tag: ${{ env.NEW_TAG }}               error tag not craeted here
           excludeTypes: ""
           includeInvalidCommits: true
+          token: ${{ secrets.ORG_BOT_PAT }}
           
       - name: Show whats new
         run: |
@@ -97,6 +97,13 @@ jobs:
           tag_name: ${{ env.NEW_TAG }}
           draft: false
           name: ${{ env.NEW_TAG }}
-          body: ${{ steps.changelog.outputs.changes }}    
+          body: ${{ steps.changelog.outputs.changes }}
+          
+      - name: Revert on failure
+        if: ${{ failure() }}
+        run: |
+          git branch -D release/${{ env.NEW_TAG }}
+          git tag -d ${{ env.NEW_TAG }}
+          git push --delete origin ${{ env.NEW_TAG }}
           
    
