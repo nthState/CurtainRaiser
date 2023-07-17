@@ -68,14 +68,14 @@ jobs:
           git checkout main
           git pull
 
-     - name: Update CHANGELOG
-       id: changelog
-       uses: Requarks/changelog-action@v1.5.0
-       with:
-         tag: release/${{ env.NEW_TAG }}
-         excludeTypes: ""
-         includeInvalidCommits: true
-         token: ${{ secrets.ORG_BOT_PAT }}
+      - name: Update CHANGELOG
+        id: changelog
+        uses: Requarks/changelog-action@v1.5.0
+        with:
+          tag: release/${{ env.NEW_TAG }}
+          excludeTypes: ""
+          includeInvalidCommits: true
+          token: ${{ secrets.ORG_BOT_PAT }}
           
 #      - name: Show whats new
 #        run: |
@@ -90,14 +90,14 @@ jobs:
 #          git commit -m "docs: update CHANGELOG.md for ${{ env.NEW_TAG }} [skip ci]" || echo "No changes to commit"
 #          git push
           
-     - name: Create Pull Request
-       env:
-         GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
-       run: |
-         PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
-         echo $PR_URL
-         #gh pr review $PR_URL --approve
-         #gh pr merge $PR_URL --squash
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.ORG_BOT_PAT }}
+        run: |
+          PR_URL=$(gh pr create --base main --head release/${{ env.NEW_TAG }} --title "build: release/${{ env.NEW_TAG }}" --body "BOT: build: release/${{ env.NEW_TAG }}")
+          echo $PR_URL
+          #gh pr review $PR_URL --approve
+          #gh pr merge $PR_URL --squash
           
 #      - name: Create Release
 #        uses: softprops/action-gh-release@v1
@@ -112,8 +112,8 @@ jobs:
         if: ${{ failure() }}
         run: |
           git checkout main
-#          git tag -d ${{ env.NEW_TAG }}
-#          git push --delete origin ${{ env.NEW_TAG }}
+          git tag -d ${{ env.NEW_TAG }}
+          git push --delete origin ${{ env.NEW_TAG }}
           git branch -D release/${{ env.NEW_TAG }}
           git push origin --delete release/${{ env.NEW_TAG }}
           
