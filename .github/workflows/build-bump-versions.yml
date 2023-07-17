@@ -68,7 +68,7 @@ jobs:
         id: changelog
         uses: Requarks/changelog-action@v1.5.0
         with:
-          tag: ${{ env.NEW_TAG }}               error tag not craeted here
+          tag: ${{ env.NEW_TAG }}
           excludeTypes: ""
           includeInvalidCommits: true
           token: ${{ secrets.ORG_BOT_PAT }}
@@ -102,8 +102,8 @@ jobs:
       - name: Revert on failure
         if: ${{ failure() }}
         run: |
-          git branch -D release/${{ env.NEW_TAG }}
           git tag -d ${{ env.NEW_TAG }}
           git push --delete origin ${{ env.NEW_TAG }}
+          git branch -D release/${{ env.NEW_TAG }}
           
    
