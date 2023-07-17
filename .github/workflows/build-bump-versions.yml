@@ -100,6 +100,7 @@ jobs:
           draft: false
           name: ${{ env.NEW_TAG }}
           body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ secrets.ORG_BOT_PAT }}
           
       - name: Revert on failure
         if: ${{ failure() }}
@@ -108,5 +109,6 @@ jobs:
           git tag -d ${{ env.NEW_TAG }}
           git push --delete origin ${{ env.NEW_TAG }}
           git branch -D release/${{ env.NEW_TAG }}
+          git push origin --delete release/${{ env.NEW_TAG }}
           
    
