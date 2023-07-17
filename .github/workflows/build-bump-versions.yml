@@ -10,7 +10,6 @@ concurrency:
 env:
   GITHUB_TOKEN: ${{ secrets.ORG_BOT_PAT }}
   VERSION_FILE: "Configuration/Version.xcconfig"
-  GITHUB_TOKEN: ${{ secrets.ORG_BOT_PAT }}
   GITHUB_EMAIL: "bot@nthstate.com"
   GITHUB_USERNAME: "nthState-bot"
 
